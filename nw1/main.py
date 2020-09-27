@@ -1,4 +1,9 @@
-import sys
-mf = sys.path.append('/home/bratkova/Desktop/learn/code/modules/my_fractions/MyFractionCort.py')
+# i = [1, 0, 0, 0, 1, 1, 0, 0, 1, 1, 1, 0, 1, 0, 1, 1, 1, 0, 0, 1, 1, 0, 0, 0, 1]
+# o = [0, 1, 1, 1, 0, 1, 0, 0, 0, 1, 1, 0, 0, 0, 1, 1, 0, 0, 0, 1, 0, 1, 1, 1, 0]
 
-m
+from mainwindow import Widget
+
+
+if __name__ == '__main__':
+    window = Widget()
+    window.start()
