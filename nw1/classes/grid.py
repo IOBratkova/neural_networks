@@ -18,7 +18,7 @@ class MyGrid:
         row = int(event.y // row_height)
         if not self.titles[row][col]:
             self.titles[row][col] = self.grid.create_rectangle(col * col_width, row * row_height, (col + 1) * col_width,
-                                                 (row + 1) * row_height, fill="black")
+                                                 (row + 1) * row_height, fill="green")
         else:
             self.grid.delete(self.titles[row][col])
             self.titles[row][col] = None
