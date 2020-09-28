@@ -8,8 +8,6 @@ class MyGrid:
         self.count_cols = cols
         self.titles = [[None for _ in range(self.count_cols)] for _ in range(self.count_rows)]
         self.grid = Canvas(self.widget, width=250, height=250, borderwidth=5, background='white')
-
-    def set_gird(self):
         self.grid.pack(anchor=NW)
         self.grid.bind("<Button-1>", self.call_back)
 
