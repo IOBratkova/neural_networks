@@ -50,17 +50,6 @@ class Widget:
         self.__function_label = Label(self.__menu_frame, text='Функция: ')
         self.__function_label.grid(column=0, row=0)
 
-        # master = Tk()
-        #
-        # variable = StringVar(master)
-        # variable.set(OPTIONS[0])  # default value
-        #
-        # w = OptionMenu(master, variable, *OPTIONS)
-        # w.pack()
-        #
-        # def ok():
-        #     print("value is:" + variable.get())
-
         self.__var_options_menu = StringVar(self.__menu_frame)
         func = Const()
         functions = [func.binary_function[0], func.bipolar_function[0]]

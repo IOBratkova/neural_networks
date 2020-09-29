@@ -3,7 +3,7 @@ class Neuron:
         self.count_input = count_input
         self.count_output = count_output
         self.x_list = x_list
-        self.w_list = [0 for i in range(count_input)]
+        self.w_list = [0 for _ in range(count_input)]
         self.function = function
 
     # входоной суммарный сигнал (s)
