@@ -85,7 +85,7 @@ class Widget:
 
     def __set_other_buttons(self):
         self.__algorithm_frame = Frame(self.__window)
-        self.__clean_button = Button(self.__algorithm_frame, text='Очистить', width=25)
+        self.__clean_button = Button(self.__algorithm_frame, text='Очистить', width=25, command=self.__clear)
         self.__clean_button.grid(column=0, row=0)
         self.__teach_button = Button(self.__algorithm_frame, text='Обучить', width=25)
         self.__teach_button.grid(column=0, row=1)
@@ -106,3 +106,8 @@ class Widget:
         self.__radiobutton_b = Radiobutton(self.__answer_box_frame, text='B1/B2', state=DISABLED, variable=b_var)
         self.__radiobutton_b.grid(column=2, row=0)
         self.__answer_box_frame.place(x=275, y=260)
+
+    def __clear(self):
+        self.__my_grid.titles = [[None for _ in range(self.__my_grid.count_cols)] for _ in
+                                 range(self.__my_grid.count_rows)]
+        self.__my_grid.grid.delete("all")
