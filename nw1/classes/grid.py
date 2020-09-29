@@ -2,12 +2,12 @@ from tkinter import *
 
 
 class MyGrid:
-    def __init__(self, rows, cols, widget):
-        self.widget = widget
+    def __init__(self, rows, cols, frame):
+        self.frame = frame
         self.count_rows = rows
         self.count_cols = cols
         self.titles = [[None for _ in range(self.count_cols)] for _ in range(self.count_rows)]
-        self.grid = Canvas(self.widget, width=255, height=255, borderwidth=5, background='white')
+        self.grid = Canvas(self.frame, width=255, height=255, borderwidth=5, background='white')
         self.grid.pack(anchor=NW)
         self.grid.bind("<Button-1>", self.call_back)
 
