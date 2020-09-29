@@ -10,5 +10,5 @@ if __name__ == '__main__':
     window.start()
 
     rows = columns = 5
-    neuron = Neuron(rows*columns, 1, None)
+    neuron = Neuron(rows*columns, 1, None, None)
     print(neuron.w_list)

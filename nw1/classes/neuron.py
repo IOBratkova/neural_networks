@@ -6,6 +6,7 @@ class Neuron:
         self.w_list = [0 for i in range(count_input)]
         self.function = function
 
+    # входоной суммарный сигнал (s)
     def z(self, b):
         z = 0
         i = 0
