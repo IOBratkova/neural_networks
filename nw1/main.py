@@ -3,7 +3,7 @@
 
 from mainwindow import Widget
 
-from nw1.classes.neuron import Neuron
+from classes.neuron import Neuron
 
 if __name__ == '__main__':
     window = Widget()

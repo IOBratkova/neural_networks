@@ -1,5 +1,6 @@
 import math
 
+
 class Const(object):
 
     def bipolar(self, s):

@@ -5,7 +5,7 @@ from classes.grid import MyGrid
 class Widget:
     def __init__(self):
         self.__window = Tk()
-        self.__window.wm_minsize(470, 270)
+        self.__window.wm_minsize(520, 300)
         self.__button_memento_a1 = None
         self.__button_memento_a2 = None
         self.__button_memento_b1 = None
@@ -81,7 +81,7 @@ class Widget:
         self.__check_memento_c = Checkbutton(self.__memento_frame, onvalue=1, offvalue=0, state=DISABLED)
         self.__check_memento_c.grid(column=1, row=4)
 
-        self.__memento_frame.place(x=325, y=2)
+        self.__memento_frame.place(x=345, y=2)
 
     def __set_other_buttons(self):
         self.__algorithm_frame = Frame(self.__window)
@@ -91,7 +91,7 @@ class Widget:
         self.__teach_button.grid(column=0, row=1)
         self.__recognize_button = Button(self.__algorithm_frame, text='Распознать', width=25)
         self.__recognize_button.grid(column=0, row=2)
-        self.__algorithm_frame.place(x=275, y=140)
+        self.__algorithm_frame.place(x=275, y=160)
 
     def __set_answer_box(self):
         self.__answer_box_frame = Frame(self.__window)
@@ -105,4 +105,4 @@ class Widget:
         self.__radiobutton_a.grid(column=1, row=0)
         self.__radiobutton_b = Radiobutton(self.__answer_box_frame, text='B1/B2', state=DISABLED, variable=b_var)
         self.__radiobutton_b.grid(column=2, row=0)
-        self.__answer_box_frame.place(x=275, y=230)
+        self.__answer_box_frame.place(x=275, y=260)

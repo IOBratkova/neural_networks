@@ -7,7 +7,7 @@ class MyGrid:
         self.count_rows = rows
         self.count_cols = cols
         self.titles = [[None for _ in range(self.count_cols)] for _ in range(self.count_rows)]
-        self.grid = Canvas(self.widget, width=250, height=250, borderwidth=5, background='white')
+        self.grid = Canvas(self.widget, width=255, height=255, borderwidth=5, background='white')
         self.grid.pack(anchor=NW)
         self.grid.bind("<Button-1>", self.call_back)
 
@@ -18,7 +18,7 @@ class MyGrid:
         row = int(event.y // row_height)
         if not self.titles[row][col]:
             self.titles[row][col] = self.grid.create_rectangle(col * col_width, row * row_height, (col + 1) * col_width,
-                                                 (row + 1) * row_height, fill="green")
+                                                 (row + 1) * row_height, fill="pink")
         else:
             self.grid.delete(self.titles[row][col])
             self.titles[row][col] = None
