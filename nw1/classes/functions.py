@@ -3,6 +3,10 @@ import math
 
 class Const(object):
 
+    def __init__(self):
+        self.binary_function = ('Бинарная', self.binary)
+        self.bipolar_function = ('Биполярная', self.bipolar)
+
     def bipolar(self, s):
         return 1 if s > 0 else -1
 
