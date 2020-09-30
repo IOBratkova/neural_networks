@@ -1,4 +1,11 @@
+# Функции переехали сюда
+# from math import pow, e
+# function_dict = {'Биполярная': (lambda x: 1 if x > 0 else 0, lambda w, x, y: w + 1 if x == 1 and y == 1 else
+# w - 1 if x != 0 and not y else w if not x else w),
+#                       'Бинарная': (lambda x: 1 if x > 0 else -1, lambda w, x, y: w + x * y)}
+# functions_s = [lambda s: 1 / (1 + pow(e, -s)), lambda s: 2 / (1 + pow(e, -2 * s)) - 1, lambda s: max(0, s)]
 import math
+
 
 
 class ActivationFunctionConst(object):

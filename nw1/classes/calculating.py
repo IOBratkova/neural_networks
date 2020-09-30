@@ -1,10 +1,12 @@
 import copy
 from classes.neuron import Neuron
+from classes.functions import ActivationFunctionConst
 
 
 class Calculating:
     def __init__(self):
-        self.act_func = None
+        t = ActivationFunctionConst()
+        self.act_func = t.bipolar_function
         self.letter_a1 = None
         self.letter_a2 = None
         self.letter_b1 = None
@@ -15,15 +17,21 @@ class Calculating:
 
     # Обчающая выборка по буквам
     def make_m(self):
-        if self.act_func is None:
-            self.m = self.__make_m_by_bipolar()
-            return
-        elif self.act_func[0] == 'Бинарная':
+        if self.act_func[0] == 'Бинарная':
             self.m = self.__make_m_by_binary()
-            return
         elif self.act_func[0] == 'Биполярная':
             self.m = self.__make_m_by_bipolar()
-            return
+        else:
+            self.m = self.__make_m_by_bipolar()
+        # if self.act_func is None:
+        #     self.m = self.__make_m_by_bipolar()
+        #     return
+        # elif self.act_func[0] == 'Бинарная':
+        #     self.m = self.__make_m_by_binary()
+        #     return
+        # elif self.act_func[0] == 'Биполярная':
+        #     self.m = self.__make_m_by_bipolar()
+        #     return
 
             # Создание нейрона
     def create_neuron(self, list):

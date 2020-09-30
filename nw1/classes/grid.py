@@ -25,6 +25,6 @@ class MyGrid:
             self.titles[row][col] = None
 
     def get_width_height(self):
-        self.col_width = self.grid.winfo_width() / self.count_cols
-        self.row_height = self.grid.winfo_height() / self.count_rows
+        self.col_width = 300 / self.count_cols
+        self.row_height = 300 / self.count_rows
         return self.col_width, self.row_height

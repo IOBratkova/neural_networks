@@ -8,7 +8,7 @@ from classes.neuron import Neuron
 if __name__ == '__main__':
     window = Widget()
     window.start()
-
-    rows = columns = 5
-    neuron = Neuron(rows*columns, 1, None, None)
-    print(neuron.w_list)
+    #
+    # rows = columns = 5
+    # neuron = Neuron(rows*columns, 1, None, None)
+    # print(neuron.w_list)
