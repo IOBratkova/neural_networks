@@ -22,7 +22,9 @@ class Controller:
         self.algorithm.letter_c = [0 if not el else 1 for line in matrix for el in line]
 
     def read_function(self, name_func):
-        if name_func == 'Бинарная':
+        if name_func is None:
+            self.algorithm.act_func = ActivationFunctionConst.binary
+        elif name_func == 'Бинарная':
             self.algorithm.act_func = ActivationFunctionConst.binary
         elif name_func == 'Биполярная':
             self.algorithm.act_func = ActivationFunctionConst.bipolar
