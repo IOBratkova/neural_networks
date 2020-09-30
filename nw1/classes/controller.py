@@ -23,9 +23,10 @@ class Controller:
 
     def read_function(self, name_func):
         if name_func == 'Бинарная':
-            self.algorithm.function = ActivationFunctionConst.binary
+            self.algorithm.act_func = ActivationFunctionConst.binary
         elif name_func == 'Биполярная':
-            self.algorithm.function = ActivationFunctionConst.bipolar
+            self.algorithm.act_func = ActivationFunctionConst.bipolar
+
 
     def teach_neuron(self):
         self.algorithm.calculate()

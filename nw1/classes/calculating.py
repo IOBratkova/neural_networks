@@ -1,6 +1,7 @@
 import copy
 from classes.neuron import Neuron
 
+
 class Calculating:
     def __init__(self):
         self.act_func = None
@@ -14,14 +15,19 @@ class Calculating:
 
     # Обчающая выборка по буквам
     def make_m(self):
-        if self.act_func[0] == 'Бинарная':
+        if self.act_func is None:
+            self.m = self.__make_m_by_bipolar()
+            return
+        elif self.act_func[0] == 'Бинарная':
             self.m = self.__make_m_by_binary()
+            return
         elif self.act_func[0] == 'Биполярная':
             self.m = self.__make_m_by_bipolar()
+            return
 
-    # Создание нейрона
-    def create_neuron(self):
-        count_input = len(self.letter_a1)
+            # Создание нейрона
+    def create_neuron(self, list):
+        count_input = len(list)
         count_input += 1
         count_output = 1
         function = self.act_func
@@ -47,7 +53,8 @@ class Calculating:
         return [(a1, 1), (a2, 1), (b1, -1), (b2, -1)]
 
     def calculate(self):
-        self.create_neuron()
-        print('>> нейрон')
-
+        self.make_m()                   # Создали обучающую выборку
+        print('>> Обучающее множество М инициализировано')
+        self.create_neuron(self.m[0][0])            # Создали нейрон
+        print('>> Инциализирован нейрон')
 

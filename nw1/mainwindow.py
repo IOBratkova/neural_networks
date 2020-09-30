@@ -25,28 +25,10 @@ class Widget:
         self.__radiobutton_a = None
         self.__radiobutton_b = None
         self.__result_label = None
-        self.__const_a1 = [[1, 0, 0, 0, 1], [1, 0, 0, 1, 1], [1, 0, 1, 0, 1], [1, 1, 0, 0, 1], [1, 0, 0, 0, 1]]
-        self.__const_a2 = [[1, 0, 0, 1, 1], [1, 0, 0, 1, 1], [1, 0, 1, 0, 1], [1, 1, 0, 0, 1], [1, 1, 0, 0, 1]]
-        self.__const_b1 = [[0, 1, 1, 1, 0], [1, 0, 0, 0, 1], [1, 0, 0, 0, 1], [1, 0, 0, 0, 1], [0, 1, 1, 1, 0]]
-        self.__const_b2 = [[1, 1, 1, 1, 1], [1, 0, 0, 0, 1], [1, 0, 0, 0, 1], [1, 0, 0, 0, 1], [1, 1, 1, 1, 1]]
-
-    def __set_const_letter(self, matrix):
-        for i in range(len(matrix)):
-            for j in range(len(matrix[i])):
-                if matrix[i][j] == 1:
-                    self.__my_grid.titles[i][j] \
-                        = self.__my_grid.grid.create_rectangle(j * self.__my_grid.col_width,
-                                                               i * self.__my_grid.row_height,
-                                                               (j + 1) * self.__my_grid.col_width,
-                                                               (i + 1) * self.__my_grid.row_height,
-                                                               fill="green")
-                else:
-                    self.__my_grid.grid.delete(self.__my_grid.titles[i][j])
-                    self.__my_grid.titles[i][j] = None
-
-    def __set_const_a1(self):
-        print('>> Константная буква И1')
-        self.__set_const_letter(self.__const_a1)
+        self.__const_a1 = None
+        self.__const_a2 = None
+        self.__const_b1 = None
+        self.__const_b2 = None
 
     def start(self):
         self.__set_settings()
@@ -61,6 +43,44 @@ class Widget:
         self.__set_other_buttons()
         self.__set_answer_box()
         self.__set_functions_menu()
+        self.__set_const()
+
+    def __set_const_letter(self, matrix):
+        col, row = self.__my_grid.get_width_height()
+        for i in range(len(matrix)):
+            for j in range(len(matrix[i])):
+                if matrix[i][j] == 1:
+                    self.__my_grid.titles[i][j] \
+                        = self.__my_grid.grid.create_rectangle(j * col, i * row, (j + 1) * col, (i + 1) * row, fill="pink")
+                else:
+                    self.__my_grid.grid.delete(self.__my_grid.titles[i][j])
+                    self.__my_grid.titles[i][j] = None
+
+    def __set_const_a1(self):
+        print('>> Константная буква А1 (И)')
+        self.__clear()
+        self.__set_const_letter(self.__const_a1)
+
+    def __set_const_a2(self):
+        print('>> Константная буква А2 (И)')
+        self.__clear()
+        self.__set_const_letter(self.__const_a2)
+
+    def __set_const_b1(self):
+        print('>> Константная буква B1 (O)')
+        self.__clear()
+        self.__set_const_letter(self.__const_b1)
+
+    def __set_const_b2(self):
+        print('>> Константная буква B2 (O)')
+        self.__clear()
+        self.__set_const_letter(self.__const_b2)
+
+    def __set_const(self):
+        self.__const_a1 = [[1, 0, 0, 0, 1], [1, 0, 0, 1, 1], [1, 0, 1, 0, 1], [1, 1, 0, 0, 1], [1, 0, 0, 0, 1]]
+        self.__const_a2 = [[1, 0, 0, 1, 1], [1, 0, 0, 1, 1], [1, 0, 1, 0, 1], [1, 1, 0, 0, 1], [1, 1, 0, 0, 1]]
+        self.__const_b1 = [[0, 1, 1, 1, 0], [1, 0, 0, 0, 1], [1, 0, 0, 0, 1], [1, 0, 0, 0, 1], [0, 1, 1, 1, 0]]
+        self.__const_b2 = [[1, 1, 1, 1, 1], [1, 0, 0, 0, 1], [1, 0, 0, 0, 1], [1, 0, 0, 0, 1], [1, 1, 1, 1, 1]]
 
     def __set_grid(self):
         self.__grid_frame = Frame(self.__window)
@@ -74,7 +94,7 @@ class Widget:
 
         self.__var_options_menu = StringVar(self.__menu_frame)
         func = ActivationFunctionConst()
-        functions = [func.binary_function[0], func.bipolar_function[0]]
+        functions = [func.bipolar_function[0], func.binary_function[0]]
         self.__var_options_menu.set(functions[0])
         self.__menu = OptionMenu(self.__menu_frame, self.__var_options_menu, *functions)
         self.__menu.grid(column=1, row=0)
@@ -92,11 +112,11 @@ class Widget:
         self.__pattern_frame = Frame(self.__window)
         self.__button_a1 = Button(self.__pattern_frame, text='А1', width=5, command=self.__set_const_a1)
         self.__button_a1.grid(column=0, row=0)
-        self.__button_a2 = Button(self.__pattern_frame, text='А2', width=5)
+        self.__button_a2 = Button(self.__pattern_frame, text='А2', width=5, command=self.__set_const_a2)
         self.__button_a2.grid(column=0, row=1)
-        self.__button_b1 = Button(self.__pattern_frame, text='B1', width=5)
+        self.__button_b1 = Button(self.__pattern_frame, text='B1', width=5, command=self.__set_const_b1)
         self.__button_b1.grid(column=0, row=2)
-        self.__button_b2 = Button(self.__pattern_frame, text='B2', width=5)
+        self.__button_b2 = Button(self.__pattern_frame, text='B2', width=5, command=self.__set_const_b2)
         self.__button_b2.grid(column=0, row=3)
         self.__button_c = Button(self.__pattern_frame, text='C', width=5)
         self.__button_c.grid(column=0, row=6)

@@ -10,18 +10,21 @@ class MyGrid:
         self.grid = Canvas(self.frame, width=300, height=300, borderwidth=5, background='white')
         self.grid.pack(anchor=NW)
         self.grid.bind("<Button-1>", self.call_back)
-        self.col_width = self.grid.winfo_width() / self.count_cols
-        self.row_height = self.grid.winfo_height() / self.count_rows
+        self.col_width = None
+        self.row_height = None
 
     def call_back(self, event):
-        col_width = self.grid.winfo_width() / self.count_cols
-        row_height = self.grid.winfo_height() / self.count_rows
-        col = int(event.x // col_width)
-        row = int(event.y // row_height)
+        self.get_width_height()
+        col = int(event.x // self.col_width)
+        row = int(event.y // self.row_height)
         if not self.titles[row][col]:
-            self.titles[row][col] = self.grid.create_rectangle(col * col_width, row * row_height, (col + 1) * col_width,
-                                                 (row + 1) * row_height, fill="pink")
+            self.titles[row][col] = self.grid.create_rectangle(col * self.col_width, row * self.row_height, (col + 1) * self.col_width,
+                                                 (row + 1) * self.row_height, fill="pink")
         else:
             self.grid.delete(self.titles[row][col])
             self.titles[row][col] = None
 
+    def get_width_height(self):
+        self.col_width = self.grid.winfo_width() / self.count_cols
+        self.row_height = self.grid.winfo_height() / self.count_rows
+        return self.col_width, self.row_height

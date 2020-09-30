@@ -1,3 +1,5 @@
+import copy
+
 class Neuron:
     def __init__(self, count_input, count_output, x_list, function):
         self.count_input = count_input
@@ -14,8 +16,9 @@ class Neuron:
         return z + b
 
     def correction_w_list(self, x, y):
-        for w in self.w_list:
-            res = self.__correction_w(w, x, y)
+        for i in range(len(self.w_list)):
+            res = self.__correction_w(self.w_list[i], x[i], y)
+            self.w_list[i] = copy.copy(res)
 
     def __correction_w(self, w, x, y):
         return self.function[2](w, x, y)
