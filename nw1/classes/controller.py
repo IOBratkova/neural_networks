@@ -30,4 +30,4 @@ class Controller:
             self.algorithm.act_func = t.bipolar_function
 
     def teach_neuron(self):
-        self.algorithm.calculate()
+        self.algorithm.teaching()

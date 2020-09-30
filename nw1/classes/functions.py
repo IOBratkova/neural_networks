@@ -14,14 +14,14 @@ class ActivationFunctionConst(object):
         self.binary_function = ('Бинарная', self.binary, self.hebb_for_binary)
         self.bipolar_function = ('Биполярная', self.bipolar, self.hebb_for_bipolar)
 
-    def bipolar(self, s):
-        return 1 if s > 0 else -1
+    def bipolar(self, s, k):
+        return 1 if s > k else -1
 
     def hebb_for_bipolar(self, w, x, y):
         return w + x * y
 
-    def binary(self, s):
-        return 1 if s > 0 else 0
+    def binary(self, s, k):
+        return 1 if s > k else 0
 
     def hebb_for_binary(self, w, x, y):
         delta_w = 0

@@ -2,7 +2,7 @@ from tkinter import *
 from classes.grid import MyGrid
 from classes.functions import ActivationFunctionConst
 from classes.controller import Controller
-
+import copy
 
 class Widget:
     def __init__(self):
@@ -49,38 +49,79 @@ class Widget:
         col, row = self.__my_grid.get_width_height()
         for i in range(len(matrix)):
             for j in range(len(matrix[i])):
-                if matrix[i][j] == 1:
+                if matrix[i][j]:
                     self.__my_grid.titles[i][j] \
                         = self.__my_grid.grid.create_rectangle(j * col, i * row, (j + 1) * col, (i + 1) * row, fill="pink")
                 else:
                     self.__my_grid.grid.delete(self.__my_grid.titles[i][j])
                     self.__my_grid.titles[i][j] = None
 
+    def __read_letter_a1(self):
+        print('\n>> A1 считан')
+        self.__controller.read_letter_a1(self.__my_grid.titles)
+        self.__var_check_a1.set(1)
+        self.__const_a1 = copy.deepcopy(self.__my_grid.titles)
+        print(self.__controller.algorithm.letter_a1)
+
+    def __read_letter_a2(self):
+        print('\n>> A2 считан')
+        self.__controller.read_letter_a2(self.__my_grid.titles)
+        self.__var_check_a2.set(1)
+        self.__const_a2 = copy.deepcopy(self.__my_grid.titles)
+        print(self.__controller.algorithm.letter_a2)
+
+    def __read_letter_b1(self):
+        print('\n>> В1 считан')
+        self.__controller.read_letter_b1(self.__my_grid.titles)
+        self.__var_check_b1.set(1)
+        self.__const_b1 = copy.deepcopy(self.__my_grid.titles)
+        print(self.__controller.algorithm.letter_b1)
+
+    def __read_letter_b2(self):
+        print('\n>> В2 считан')
+        self.__controller.read_letter_b2(self.__my_grid.titles)
+        self.__var_check_b2.set(1)
+        self.__const_b2 = copy.deepcopy(self.__my_grid.titles)
+        print(self.__controller.algorithm.letter_b2)
+
+    def __read_letter_c(self):
+        print('\n>> С считан')
+        self.__controller.read_letter_c(self.__my_grid.titles)
+        self.__var_check_c.set(1)
+        self.__const_c = copy.deepcopy(self.__my_grid.titles)
+        print(self.__controller.algorithm.letter_c)
+
     def __set_const_a1(self):
-        print('>> Константная буква А1 (И)')
+        print('\n>> Константная буква А1 (И)')
         self.__clear()
         self.__set_const_letter(self.__const_a1)
 
     def __set_const_a2(self):
-        print('>> Константная буква А2 (И)')
+        print('\n>> Константная буква А2 (И)')
         self.__clear()
         self.__set_const_letter(self.__const_a2)
 
     def __set_const_b1(self):
-        print('>> Константная буква B1 (O)')
+        print('\n>> Константная буква B1 (O)')
         self.__clear()
         self.__set_const_letter(self.__const_b1)
 
     def __set_const_b2(self):
-        print('>> Константная буква B2 (O)')
+        print('\n>> Константная буква B2 (O)')
         self.__clear()
         self.__set_const_letter(self.__const_b2)
+
+    def __set_const_c(self):
+        print('\n>> Константная буква C')
+        self.__clear()
+        self.__set_const_letter(self.__const_c)
 
     def __set_const(self):
         self.__const_a1 = [[1, 0, 0, 0, 1], [1, 0, 0, 1, 1], [1, 0, 1, 0, 1], [1, 1, 0, 0, 1], [1, 0, 0, 0, 1]]
         self.__const_a2 = [[1, 0, 0, 1, 1], [1, 0, 0, 1, 1], [1, 0, 1, 0, 1], [1, 1, 0, 0, 1], [1, 1, 0, 0, 1]]
         self.__const_b1 = [[0, 1, 1, 1, 0], [1, 0, 0, 0, 1], [1, 0, 0, 0, 1], [1, 0, 0, 0, 1], [0, 1, 1, 1, 0]]
         self.__const_b2 = [[1, 1, 1, 1, 1], [1, 0, 0, 0, 1], [1, 0, 0, 0, 1], [1, 0, 0, 0, 1], [1, 1, 1, 1, 1]]
+        self.__const_c =  [[1, 1, 1, 1, 1], [1, 1, 1, 1, 1], [1, 1, 1, 1, 1], [1, 1, 1, 1, 1], [1, 1, 1, 1, 1]]
 
     def __set_grid(self):
         self.__grid_frame = Frame(self.__window)
@@ -105,7 +146,7 @@ class Widget:
 
     def __ok_button_click(self):
         tmp = self.__var_options_menu.get()
-        print('>> Выбрана ' + tmp + ' функция ')
+        print('\n>> Выбрана ' + tmp + ' функция ')
         self.__controller.read_function(tmp)
 
     def __set_pattern_buttons(self):
@@ -118,7 +159,7 @@ class Widget:
         self.__button_b1.grid(column=0, row=2)
         self.__button_b2 = Button(self.__pattern_frame, text='B2', width=5, command=self.__set_const_b2)
         self.__button_b2.grid(column=0, row=3)
-        self.__button_c = Button(self.__pattern_frame, text='C', width=5)
+        self.__button_c = Button(self.__pattern_frame, text='C', width=5, command=self.__set_const_c)
         self.__button_c.grid(column=0, row=6)
         self.__pattern_frame.place(x=325, y=40)
 
@@ -196,46 +237,16 @@ class Widget:
         self.__answer_box_frame.place(x=30, y=315)
 
     def __clear(self):
-        print('>> Очищено поле рисования')
+        print('\n>> Очищено поле рисования')
         self.__my_grid.titles = [[None for _ in range(self.__my_grid.count_cols)] for _ in
                                  range(self.__my_grid.count_rows)]
         self.__my_grid.grid.delete("all")
 
     def __clear_all(self):
-        print('>> Очищено всё')
+        print('\n>> Очищено всё')
         self.__clear()
         self.__set_settings()
 
-    def __read_letter_a1(self):
-        print('>> A1 считан')
-        self.__controller.read_letter_a1(self.__my_grid.titles)
-        self.__var_check_a1.set(1)
-        print(self.__controller.algorithm.letter_a1)
-
-    def __read_letter_a2(self):
-        print('>> A2 считан')
-        self.__controller.read_letter_a2(self.__my_grid.titles)
-        self.__var_check_a2.set(1)
-        print(self.__controller.algorithm.letter_a2)
-
-    def __read_letter_b1(self):
-        print('>> В1 считан')
-        self.__controller.read_letter_b1(self.__my_grid.titles)
-        self.__var_check_b1.set(1)
-        print(self.__controller.algorithm.letter_b1)
-
-    def __read_letter_b2(self):
-        print('>> В2 считан')
-        self.__controller.read_letter_b2(self.__my_grid.titles)
-        self.__var_check_b2.set(1)
-        print(self.__controller.algorithm.letter_b2)
-
-    def __read_letter_c(self):
-        print('>> С считан')
-        self.__controller.read_letter_c(self.__my_grid.titles)
-        self.__var_check_c.set(1)
-        print(self.__controller.algorithm.letter_c)
-
     def __teach_neuron(self):
-        print('>> Обучение нейрона')
+        print('\n>> Обучение нейрона')
         self.__controller.teach_neuron()
