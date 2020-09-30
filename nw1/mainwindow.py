@@ -1,6 +1,6 @@
 from tkinter import *
 from classes.grid import MyGrid
-from classes.functions import Const
+from classes.functions import ActivationFunctionConst
 from classes.controller import Controller
 
 
@@ -25,6 +25,28 @@ class Widget:
         self.__radiobutton_a = None
         self.__radiobutton_b = None
         self.__result_label = None
+        self.__const_a1 = [[1, 0, 0, 0, 1], [1, 0, 0, 1, 1], [1, 0, 1, 0, 1], [1, 1, 0, 0, 1], [1, 0, 0, 0, 1]]
+        self.__const_a2 = [[1, 0, 0, 1, 1], [1, 0, 0, 1, 1], [1, 0, 1, 0, 1], [1, 1, 0, 0, 1], [1, 1, 0, 0, 1]]
+        self.__const_b1 = [[0, 1, 1, 1, 0], [1, 0, 0, 0, 1], [1, 0, 0, 0, 1], [1, 0, 0, 0, 1], [0, 1, 1, 1, 0]]
+        self.__const_b2 = [[1, 1, 1, 1, 1], [1, 0, 0, 0, 1], [1, 0, 0, 0, 1], [1, 0, 0, 0, 1], [1, 1, 1, 1, 1]]
+
+    def __set_const_letter(self, matrix):
+        for i in range(len(matrix)):
+            for j in range(len(matrix[i])):
+                if matrix[i][j] == 1:
+                    self.__my_grid.titles[i][j] \
+                        = self.__my_grid.grid.create_rectangle(j * self.__my_grid.col_width,
+                                                               i * self.__my_grid.row_height,
+                                                               (j + 1) * self.__my_grid.col_width,
+                                                               (i + 1) * self.__my_grid.row_height,
+                                                               fill="green")
+                else:
+                    self.__my_grid.grid.delete(self.__my_grid.titles[i][j])
+                    self.__my_grid.titles[i][j] = None
+
+    def __set_const_a1(self):
+        print('>> Константная буква И1')
+        self.__set_const_letter(self.__const_a1)
 
     def start(self):
         self.__set_settings()
@@ -51,7 +73,7 @@ class Widget:
         self.__function_label.grid(column=0, row=0)
 
         self.__var_options_menu = StringVar(self.__menu_frame)
-        func = Const()
+        func = ActivationFunctionConst()
         functions = [func.binary_function[0], func.bipolar_function[0]]
         self.__var_options_menu.set(functions[0])
         self.__menu = OptionMenu(self.__menu_frame, self.__var_options_menu, *functions)
@@ -68,7 +90,7 @@ class Widget:
 
     def __set_pattern_buttons(self):
         self.__pattern_frame = Frame(self.__window)
-        self.__button_a1 = Button(self.__pattern_frame, text='А1', width=5)
+        self.__button_a1 = Button(self.__pattern_frame, text='А1', width=5, command=self.__set_const_a1)
         self.__button_a1.grid(column=0, row=0)
         self.__button_a2 = Button(self.__pattern_frame, text='А2', width=5)
         self.__button_a2.grid(column=0, row=1)
@@ -131,7 +153,7 @@ class Widget:
         self.__clean_button.grid(column=0, row=0)
         self.__clean_all = Button(self.__algorithm_frame, text='Очистить всё', width=25, command=self.__clear_all)
         self.__clean_all.grid(column=0, row=1)
-        self.__teach_button = Button(self.__algorithm_frame, text='Обучить', width=25)
+        self.__teach_button = Button(self.__algorithm_frame, text='Обучить', width=25, command=self.__teach_neuron)
         self.__teach_button.grid(column=0, row=2)
         self.__recognize_button = Button(self.__algorithm_frame, text='Распознать', width=25)
         self.__recognize_button.grid(column=0, row=3)
@@ -193,3 +215,7 @@ class Widget:
         self.__controller.read_letter_c(self.__my_grid.titles)
         self.__var_check_c.set(1)
         print(self.__controller.algorithm.letter_c)
+
+    def __teach_neuron(self):
+        print('>> Обучение нейрона')
+        self.__controller.teach_neuron()

@@ -1,4 +1,4 @@
-from classes.functions import Const
+from classes.functions import ActivationFunctionConst
 from classes.calculating import Calculating
 
 
@@ -23,6 +23,9 @@ class Controller:
 
     def read_function(self, name_func):
         if name_func == 'Бинарная':
-            self.algorithm.function = Const.binary
+            self.algorithm.function = ActivationFunctionConst.binary
         elif name_func == 'Биполярная':
-            self.algorithm.function = Const.bipolar
+            self.algorithm.function = ActivationFunctionConst.bipolar
+
+    def teach_neuron(self):
+        self.algorithm.calculate()

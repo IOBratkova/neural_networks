@@ -1,17 +1,30 @@
 import math
 
 
-class Const(object):
+class ActivationFunctionConst(object):
 
     def __init__(self):
-        self.binary_function = ('Бинарная', self.binary)
-        self.bipolar_function = ('Биполярная', self.bipolar)
+        self.binary_function = ('Бинарная', self.binary, self.hebb_for_binary)
+        self.bipolar_function = ('Биполярная', self.bipolar, self.hebb_for_bipolar)
 
     def bipolar(self, s):
         return 1 if s > 0 else -1
 
+    def hebb_for_bipolar(self, w, x, y):
+        return w + x * y
+
     def binary(self, s):
         return 1 if s > 0 else 0
+
+    def hebb_for_binary(self, w, x, y):
+        delta_w = 0
+        if x == 1 and y == 1:
+            delta_w = 1
+        elif x == 0:
+            delta_w = 0
+        elif x != 0 and y == 0:
+            delta_w = -1
+        return w + delta_w
 
     # От 0 до 1
     def sigmoid(self, s):

@@ -10,6 +10,8 @@ class MyGrid:
         self.grid = Canvas(self.frame, width=300, height=300, borderwidth=5, background='white')
         self.grid.pack(anchor=NW)
         self.grid.bind("<Button-1>", self.call_back)
+        self.col_width = self.grid.winfo_width() / self.count_cols
+        self.row_height = self.grid.winfo_height() / self.count_rows
 
     def call_back(self, event):
         col_width = self.grid.winfo_width() / self.count_cols
