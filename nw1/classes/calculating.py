@@ -16,6 +16,7 @@ class Calculating:
         self.s_list = []    # Вектор входных обучающих сигналов по буквам
         self.c = []         # Буква С
         self.divider = None # Порог для функций
+        self.k = 1.0 # Коэффициент к для "плавности"
 
     # Обчающая выборка по буквам
     def make_m(self):
@@ -97,7 +98,7 @@ class Calculating:
             y = copy.copy(self.m_list[i][1])
             j = i + 1
             print('w[' + str(j) + ']: ', end='')
-            self.neuron.correction_w_list(x_list, y)
+            self.neuron.correction_w_list(x_list, y, self.k)
 
     # Считаем входные суммарные сигналы
     def __calculate_s(self):

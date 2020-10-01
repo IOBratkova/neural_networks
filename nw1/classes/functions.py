@@ -7,7 +7,6 @@
 import math
 
 
-
 class ActivationFunctionConst(object):
 
     def __init__(self):
@@ -17,13 +16,13 @@ class ActivationFunctionConst(object):
     def bipolar(self, s, div):
         return (1, 'A') if s > div else (-1, 'B')
 
-    def hebb_for_bipolar(self, w, x, y):
-        return w + x * y
+    def hebb_for_bipolar(self, w, x, y, k=1.0):
+        return w + x * y * k
 
     def binary(self, s, div):
         return (1, 'A') if s > div else (0, 'B')
 
-    def hebb_for_binary(self, w, x, y):
+    def hebb_for_binary(self, w, x, y, k=1.0):
         delta_w = 0
         if x == 1 and y == 1:
             delta_w = 1
@@ -31,7 +30,7 @@ class ActivationFunctionConst(object):
             delta_w = 0
         elif x != 0 and y == 0:
             delta_w = -1
-        return w + delta_w
+        return w + delta_w * k
 
     # От 0 до 1
     def sigmoid(self, s):

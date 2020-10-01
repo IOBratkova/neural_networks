@@ -13,11 +13,11 @@ class Neuron:
             res += x_list[i] * self.w_list[i]
         return res
 
-    def correction_w_list(self, x_list, y):
+    def correction_w_list(self, x_list, y, k):
         for i in range(len(self.w_list)):
-            res = self.__correction_w(self.w_list[i], x_list[i], y)
+            res = self.__correction_w(self.w_list[i], x_list[i], y, k)
             self.w_list[i] = copy.copy(res)
         print(self.w_list)
 
-    def __correction_w(self, w, x, y):
-        return self.function[2](w, x, y)
+    def __correction_w(self, w, x, y, k):
+        return self.function[2](w, x, y, k)
