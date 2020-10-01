@@ -48,10 +48,10 @@ class Calculating:
 
     # Обчающая выборка для бинарной функции
     def __make_m_by_binary(self):
-        a1 = copy_and_insert_one(self.letter_a1)
-        a2 = copy_and_insert_one(self.letter_a2)
-        b1 = copy_and_insert_one(self.letter_b1)
-        b2 = copy_and_insert_one(self.letter_b2)
+        a1 = self.copy_and_insert_one(self.letter_a1)
+        a2 = self.copy_and_insert_one(self.letter_a2)
+        b1 = self.copy_and_insert_one(self.letter_b1)
+        b2 = self.copy_and_insert_one(self.letter_b2)
         return [(a1, 1, 'A1 буква'), (a2, 1, 'A2 буква'), (b1, 0, 'B1 буква'), (b2, 0, 'B2 буква')]
 
     # Обчающая выборка для биполярной функции
@@ -100,6 +100,7 @@ class Calculating:
             x_list = copy.copy(m_list[i][0])
             print('w[' + str(j) + ']: ', end='')
             neuron.correction_w_list(x_list, y, self.k)
+        return neuron.w_list
 
     def teaching(self):
         print('\n>> ОБУЧЕНИЕ...')
@@ -113,6 +114,6 @@ class Calculating:
         print('\nСозданы два нейрона на основе биполярной и бинарной функций ')
         self.__make_neuron()
         print('\nОбучение бинарного нейрона: ')
-        self.__calculate_w(self.binary_neuron, self.m_binary_list)
+        self.w_binary_list = self.__calculate_w(self.binary_neuron, self.m_binary_list)
         print('\nОбучение биполярного нейрона: ')
-        self.__calculate_w(self.bipolar_neuron, self.m_bipolar_list)
+        self.w_bipolar_list = self.__calculate_w(self.bipolar_neuron, self.m_bipolar_list)
