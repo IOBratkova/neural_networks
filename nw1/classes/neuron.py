@@ -1,7 +1,7 @@
 import copy
 
 class Neuron:
-    def __init__(self, count_input, count_output, function):
+    def __init__(self, function, count_input, count_output=1):
         self.count_input = count_input
         self.count_output = count_output
         self.w_list = [0 for _ in range(count_input)]
