@@ -133,3 +133,10 @@ class Calculating:
             tmp += self.s_list[i]
         result = tmp / len(self.s_list)
         self.divider = result
+        # (S(A1) + S(A2)) / 2 = divider_a (s1cp)
+        # (S(B1) + S(B2)) / 2 = divider_b (s2cp)
+        # divider_a - divider_b = result
+        # result / 3 = Q2 - Q1 = Q
+        # (divider_a + divider_b) / 2 = center
+        # Q / 2 = tmp => Q1 = center-tmp; Q2 = center+tmp
+

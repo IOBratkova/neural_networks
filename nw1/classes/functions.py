@@ -12,6 +12,10 @@ class ActivationFunctionConst(object):
     def __init__(self):
         self.binary_function = ('Бинарная', self.binary, self.hebb_for_binary)
         self.bipolar_function = ('Биполярная', self.bipolar, self.hebb_for_bipolar)
+        self.sigmoid_function = ('Сигмоидальная', self.sigmoid, self.hebb_for_binary)
+
+    def sigmoid(self, s, t):
+        return 1 / (1 + math.pow(math.e, -t*s))
 
     def bipolar(self, s, div):
         return (1, 'A') if s > div else (-1, 'B')
@@ -32,13 +36,10 @@ class ActivationFunctionConst(object):
             delta_w = -1
         return w + delta_w * k
 
-    # От 0 до 1
-    def sigmoid(self, s):
-        return 1 / (1 + math.pow(math.e, -s))
-
-    # От -1 до 1
-    def tanh(self, s):
-        return 2 / (1 + math.pow(math.e, -2 * s)) - 1
-
-    def re_lu(self, s):
-        return max(0, s)
+    #
+    # # От -1 до 1
+    # def tanh(self, s):
+    #     return 2 / (1 + math.pow(math.e, -2 * s)) - 1
+    #
+    # def re_lu(self, s):
+    #     return max(0, s)

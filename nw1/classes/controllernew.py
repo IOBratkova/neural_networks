@@ -1,5 +1,4 @@
-from classes.calculating import Calculating
-from classes.functions import ActivationFunctionConst
+from classes.calculatingnew import Calculating
 
 
 class Controller:
@@ -18,21 +17,15 @@ class Controller:
     def read_letter_b2(self, matrix):
         self.algorithm.letter_b2 = [0 if not el else 1 for line in matrix for el in line]
 
-    def read_letter_c(self, matrix):
-        self.algorithm.letter_c = [0 if not el else 1 for line in matrix for el in line]
+    def read_letter_c1(self, matrix):
+        self.algorithm.letter_c1 = [0 if not el else 1 for line in matrix for el in line]
 
-    def read_function(self, name_func):
-        t = ActivationFunctionConst()
-        if name_func == 'Биполярная':
-            self.algorithm.act_func = t.bipolar_function
-        elif name_func == 'Бинарная':
-            self.algorithm.act_func = t.binary_function
-        else:
-            self.algorithm.act_func = t.bipolar_function
+    def read_letter_c2(self, matrix):
+        self.algorithm.letter_c2 = [0 if not el else 1 for line in matrix for el in line]
+
+    def read_letter_c3(self, matrix):
+        self.algorithm.letter_c3 = [0 if not el else 1 for line in matrix for el in line]
 
     def teach_neuron(self, value_k):
         self.algorithm.k = value_k
         self.algorithm.teaching()
-
-    def recognize(self):
-        return self.algorithm.recognize()
