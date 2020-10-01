@@ -31,3 +31,6 @@ class Controller:
 
     def teach_neuron(self):
         self.algorithm.teaching()
+
+    def recognize(self):
+        return self.algorithm.recognize()

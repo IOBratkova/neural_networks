@@ -121,7 +121,7 @@ class Widget:
         self.__const_a2 = [[1, 0, 0, 1, 1], [1, 0, 0, 1, 1], [1, 0, 1, 0, 1], [1, 1, 0, 0, 1], [1, 1, 0, 0, 1]]
         self.__const_b1 = [[0, 1, 1, 1, 0], [1, 0, 0, 0, 1], [1, 0, 0, 0, 1], [1, 0, 0, 0, 1], [0, 1, 1, 1, 0]]
         self.__const_b2 = [[1, 1, 1, 1, 1], [1, 0, 0, 0, 1], [1, 0, 0, 0, 1], [1, 0, 0, 0, 1], [1, 1, 1, 1, 1]]
-        self.__const_c =  [[1, 1, 1, 1, 1], [1, 1, 1, 1, 1], [1, 1, 1, 1, 1], [1, 1, 1, 1, 1], [1, 1, 1, 1, 1]]
+        self.__const_c =  [[1, 0, 1, 1, 1], [1, 0, 0, 1, 1], [1, 0, 1, 0, 1], [1, 1, 0, 0, 1], [1, 1, 1, 1, 1]]
 
     def __set_grid(self):
         self.__grid_frame = Frame(self.__window)
@@ -216,7 +216,7 @@ class Widget:
         self.__clean_all.grid(column=0, row=1)
         self.__teach_button = Button(self.__algorithm_frame, text='Обучить', width=25, command=self.__teach_neuron)
         self.__teach_button.grid(column=0, row=2)
-        self.__recognize_button = Button(self.__algorithm_frame, text='Распознать', width=25)
+        self.__recognize_button = Button(self.__algorithm_frame, text='Распознать', width=25, command=self.__recognize)
         self.__recognize_button.grid(column=0, row=3)
         self.__algorithm_frame.place(x=325, y=200)
 
@@ -228,11 +228,11 @@ class Widget:
         self.__b_radiobutton.set(0)
         self.__result_label = Label(self.__answer_box_frame, text='Результат: ')
         self.__result_label.grid(column=1, row=0)
-        self.__radiobutton_a = Radiobutton(self.__answer_box_frame, text='A1/A2', state=DISABLED,
-                                           variable=self.__a_radiobutton)
+        self.__radiobutton_a = Radiobutton(self.__answer_box_frame, text='A1/A2',
+                                           variable=self.__a_radiobutton, value=1, state=DISABLED)
         self.__radiobutton_a.grid(column=2, row=0)
-        self.__radiobutton_b = Radiobutton(self.__answer_box_frame, text='B1/B2', state=DISABLED,
-                                           variable=self.__b_radiobutton)
+        self.__radiobutton_b = Radiobutton(self.__answer_box_frame, text='B1/B2',
+                                           variable=self.__b_radiobutton, value=1, state=DISABLED)
         self.__radiobutton_b.grid(column=3, row=0)
         self.__answer_box_frame.place(x=30, y=315)
 
@@ -248,5 +248,23 @@ class Widget:
         self.__set_settings()
 
     def __teach_neuron(self):
-        print('\n>> Обучение нейрона')
-        self.__controller.teach_neuron()
+        if self.__controller.algorithm.letter_a1 is None:
+            print('\n>> Символ A1 не введён')
+        elif self.__controller.algorithm.letter_a2 is None:
+            print('\n>> Символ A2 не введён')
+        elif self.__controller.algorithm.letter_b1 is None:
+            print('\n>> Символ B1 не введён')
+        elif self.__controller.algorithm.letter_b2 is None:
+            print('\n>> Символ B2 не введён')
+        else:
+            self.__controller.teach_neuron()
+
+    def __recognize(self):
+        if self.__controller.algorithm.letter_c is None:
+            print('\n>> Символ C не введён')
+        else:
+            result = self.__controller.recognize()
+            if result[1] == 'A':
+                self.__a_radiobutton.set(1)
+            else:
+                self.__b_radiobutton.set(1)
