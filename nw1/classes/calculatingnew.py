@@ -3,6 +3,7 @@ from classes.neuron import Neuron
 from classes.functions import ActivationFunctionConst
 
 
+# TODO: необходимо посчитать входные суммарные сигналы и проделать "алгоритм чашина" с фигней про букву С и буквы Q
 class Calculating:
     def __init__(self):
         # Буквы
