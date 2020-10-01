@@ -142,6 +142,15 @@ class Widget:
 
         self.__button_ok = Button(self.__menu_frame, text='OK', width=1, command=self.__ok_button_click)
         self.__button_ok.grid(column=2, row=0)
+
+        self.__label_k_min = Label(self.__menu_frame, text='k =      0< ')
+        self.__label_k_min.grid(column=0, row=1)
+        self.__value_k = DoubleVar()
+        self.__value_k.set(1.0)
+        self.__entry_k = Entry(self.__menu_frame, textvariable=self.__value_k, width=5)
+        self.__entry_k.grid(column=1, row=1)
+        self.__label_k_min = Label(self.__menu_frame, text='<=1 ')
+        self.__label_k_min.grid(column=2, row=1)
         self.__menu_frame.place(x=325, y=0)
 
     def __ok_button_click(self):
@@ -161,7 +170,7 @@ class Widget:
         self.__button_b2.grid(column=0, row=3)
         self.__button_c = Button(self.__pattern_frame, text='C', width=5, command=self.__set_const_c)
         self.__button_c.grid(column=0, row=6)
-        self.__pattern_frame.place(x=325, y=40)
+        self.__pattern_frame.place(x=325, y=60)
 
     def __set_memento_buttons(self):
         self.__memento_frame = Frame(self.__window)
@@ -206,7 +215,7 @@ class Widget:
                                              state=DISABLED)
         self.__check_memento_c.grid(column=1, row=4)
 
-        self.__memento_frame.place(x=395, y=40)
+        self.__memento_frame.place(x=395, y=60)
 
     def __set_other_buttons(self):
         self.__algorithm_frame = Frame(self.__window)
@@ -218,7 +227,7 @@ class Widget:
         self.__teach_button.grid(column=0, row=2)
         self.__recognize_button = Button(self.__algorithm_frame, text='Распознать', width=25, command=self.__recognize)
         self.__recognize_button.grid(column=0, row=3)
-        self.__algorithm_frame.place(x=325, y=200)
+        self.__algorithm_frame.place(x=325, y=220)
 
     def __set_answer_box(self):
         self.__answer_box_frame = Frame(self.__window)
@@ -257,7 +266,8 @@ class Widget:
         elif self.__controller.algorithm.letter_b2 is None:
             print('\n>> Символ B2 не введён')
         else:
-            self.__controller.teach_neuron()
+            print('\n>> Вычисления при k = ', self.__value_k.get())
+            self.__controller.teach_neuron(float(self.__value_k.get()))
 
     def __recognize(self):
         if self.__controller.algorithm.letter_c is None:
