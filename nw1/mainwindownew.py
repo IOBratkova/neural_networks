@@ -1,15 +1,15 @@
-from tkinter import *
-from classes.grid import MyGrid
-from classes.functions import ActivationFunctionConst
-from classes.controllernew import Controller
 import copy
+from tkinter import *
+
+from classes.controllernew import Controller
+from classes.grid import MyGrid
 
 
 class MyWidger:
     def __init__(self):
         # Окно0
         self.__window = Tk()
-        self.__window.wm_minsize(620, 400)
+        self.__window.wm_minsize(620, 470)
         self.__controller = None
 
         # Грида
@@ -76,6 +76,7 @@ class MyWidger:
         self.__set_letter_buttons()
         self.__set_functions_menu()
         self.__set_other_buttons()
+        self.__set_answer_box()
 
     def start(self):
         self.__set_settings()
@@ -114,7 +115,7 @@ class MyWidger:
         self.__clean_all.grid(column=0, row=1)
         self.__teach_button = Button(self.__algorithm_frame, text='Обучить', width=25, command=self.__teach_neuron)
         self.__teach_button.grid(column=0, row=2)
-        self.__recognize_button = Button(self.__algorithm_frame, text='Распознать', width=25)#, command=self.__recognize)
+        self.__recognize_button = Button(self.__algorithm_frame, text='Распознать', width=25, command=self.__recognize)
         self.__recognize_button.grid(column=0, row=3)
         self.__algorithm_frame.place(x=380, y=250)
 
@@ -130,11 +131,6 @@ class MyWidger:
         else:
             print('\n>> Вычисления при k = ', self.__value_k.get())
             self.__controller.teach_neuron(float(self.__value_k.get()))
-
-    # def __ok_button_click(self):
-    #     tmp = self.__var_options_menu.get()
-    #     print('\n>> Выбрана ' + tmp + ' функция ')
-    #     # self.__controller.read_function(tmp)
 
     def __set_grid(self):
         self.__grid_frame = Frame(self.__window)
@@ -165,7 +161,7 @@ class MyWidger:
 
         self.__button_a2 = Button(self.__button_frame, text='А2', width=5, command=self.__set_const_a2)
         self.__button_a2.grid(column=0, row=1)
-        self.__button_memento_a2 = Button(self.__button_frame, text='Запомнить А1', width=15,
+        self.__button_memento_a2 = Button(self.__button_frame, text='Запомнить А2', width=15,
                                           command=self.__read_letter_a2)
         self.__button_memento_a2.grid(column=1, row=1)
         self.__var_check_a2 = IntVar(0)
@@ -331,3 +327,80 @@ class MyWidger:
         print('\nWINDOW: Очищено всё')
         self.__clear()
         self.__set_settings()
+
+    def __recognize(self):
+        if self.__controller.algorithm.letter_c1 is None and self.__controller.algorithm.letter_c2 is None and self.__controller.algorithm.letter_c3 is None:
+            print('\n>> Не введён ни один символ C')
+        else:
+            result = self.__controller.recognize()
+            self.__set_result(result)
+
+    def __set_result(self, result):
+        self.__a1_radiobutton.set(0)
+        self.__b1_radiobutton.set(0)
+        self.__a2_radiobutton.set(0)
+        self.__b2_radiobutton.set(0)
+        self.__a3_radiobutton.set(0)
+        self.__b3_radiobutton.set(0)
+        for r in result:
+            if r[1] == 'C1':
+                self.__set(r, self.__a1_radiobutton, self.__b1_radiobutton)
+            if r[1] == 'C2':
+                self.__set(r, self.__a2_radiobutton, self.__b2_radiobutton)
+            if r[1] == 'C3':
+                self.__set(r, self.__a3_radiobutton, self.__b3_radiobutton)
+
+    def __set(self, r, button_a, button_b):
+        if r[0][1] == 'A':
+            button_a.set(1)
+        else:
+            button_b.set(1)
+
+    def __set_answer_box(self):
+        self.__answer_box_frame = Frame(self.__window)
+        self.__a1_radiobutton = BooleanVar()
+        self.__b1_radiobutton = BooleanVar()
+        self.__a1_radiobutton.set(0)
+        self.__b1_radiobutton.set(0)
+
+        self.__a2_radiobutton = BooleanVar()
+        self.__b2_radiobutton = BooleanVar()
+        self.__a2_radiobutton.set(0)
+        self.__b2_radiobutton.set(0)
+
+        self.__a3_radiobutton = BooleanVar()
+        self.__b3_radiobutton = BooleanVar()
+        self.__a3_radiobutton.set(0)
+        self.__b3_radiobutton.set(0)
+
+        self.__result_label = Label(self.__answer_box_frame, text='Результат: ')
+        self.__result_label.grid(column=1, row=0)
+
+        self.__result_label = Label(self.__answer_box_frame, text='C1: ')
+        self.__result_label.grid(column=1, row=1)
+        self.__radiobutton_a = Radiobutton(self.__answer_box_frame, text='A1/A2',
+                                           variable=self.__a1_radiobutton, value=1, state=DISABLED)
+        self.__radiobutton_a.grid(column=2, row=1)
+        self.__radiobutton_b = Radiobutton(self.__answer_box_frame, text='B1/B2',
+                                           variable=self.__b1_radiobutton, value=1, state=DISABLED)
+        self.__radiobutton_b.grid(column=3, row=1)
+
+        self.__result_label = Label(self.__answer_box_frame, text='C2: ')
+        self.__result_label.grid(column=1, row=2)
+        self.__radiobutton_a = Radiobutton(self.__answer_box_frame, text='A1/A2',
+                                           variable=self.__a2_radiobutton, value=1, state=DISABLED)
+        self.__radiobutton_a.grid(column=2, row=2)
+        self.__radiobutton_b = Radiobutton(self.__answer_box_frame, text='B1/B2',
+                                           variable=self.__b2_radiobutton, value=1, state=DISABLED)
+        self.__radiobutton_b.grid(column=3, row=2)
+
+        self.__result_label = Label(self.__answer_box_frame, text='C3: ')
+        self.__result_label.grid(column=1, row=3)
+        self.__radiobutton_a = Radiobutton(self.__answer_box_frame, text='A1/A2',
+                                           variable=self.__a3_radiobutton, value=1, state=DISABLED)
+        self.__radiobutton_a.grid(column=2, row=3)
+        self.__radiobutton_b = Radiobutton(self.__answer_box_frame, text='B1/B2',
+                                           variable=self.__b3_radiobutton, value=1, state=DISABLED)
+        self.__radiobutton_b.grid(column=3, row=3)
+
+        self.__answer_box_frame.place(x=5, y=370)
