@@ -9,7 +9,7 @@ class MyWidger:
     def __init__(self):
         # Окно0
         self.__window = Tk()
-        self.__window.wm_minsize(570, 350)
+        self.__window.wm_minsize(620, 400)
         self.__controller = None
 
         # Грида
@@ -104,7 +104,7 @@ class MyWidger:
         self.__entry_k.grid(column=1, row=0)
         self.__label_k_min = Label(self.__menu_frame, text='<=1 ')
         self.__label_k_min.grid(column=2, row=0)
-        self.__menu_frame.place(x=320, y=185)
+        self.__menu_frame.place(x=380, y=220)
 
     def __set_other_buttons(self):
         self.__algorithm_frame = Frame(self.__window)
@@ -116,7 +116,7 @@ class MyWidger:
         self.__teach_button.grid(column=0, row=2)
         self.__recognize_button = Button(self.__algorithm_frame, text='Распознать', width=25)#, command=self.__recognize)
         self.__recognize_button.grid(column=0, row=3)
-        self.__algorithm_frame.place(x=320, y=210)
+        self.__algorithm_frame.place(x=380, y=250)
 
     def __teach_neuron(self):
         if self.__controller.algorithm.letter_a1 is None:
@@ -139,7 +139,7 @@ class MyWidger:
     def __set_grid(self):
         self.__grid_frame = Frame(self.__window)
         self.__my_grid = MyGrid(5, 5, self.__grid_frame)
-        self.__grid_frame.place(x=0, y=0)
+        self.__grid_frame.place(x=5, y=5)
 
     def __set_const(self):
         self.__const_a1 = [[1, 0, 0, 0, 1], [1, 0, 0, 1, 1], [1, 0, 1, 0, 1], [1, 1, 0, 0, 1], [1, 0, 0, 0, 1]]
@@ -223,7 +223,7 @@ class MyWidger:
                                               state=DISABLED)
         self.__check_memento_c3.grid(column=2, row=6)
 
-        self.__button_frame.place(x=320, y=0)
+        self.__button_frame.place(x=380, y=0)
 
     def __read_letter_a1(self):
         print('\nWINDOW: A1 считан')
