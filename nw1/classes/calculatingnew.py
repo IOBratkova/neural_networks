@@ -4,7 +4,6 @@ from classes.neuron import Neuron
 from classes.functions import ActivationFunctionConst
 
 
-# TODO: необходимо посчитать входные суммарные сигналы и проделать "алгоритм чашина" с фигней про букву С и буквы Q
 class Calculating:
     def __init__(self):
         # Буквы
@@ -118,15 +117,25 @@ class Calculating:
         print('\n>> Выбрана функция варианта - ' + self.sigmoid_neuron.function[0])
 
         print('\n>> Входной(ые) суммарные сигналы С: ')
-        self.s_c_binary_list = self.__calculate_c_s()
+        self.s_c_binary_list = self.__calculate_c_s(self.sigmoid_neuron)
 
         print('\n>> Согласно функции активации, изображение(я) принадлежит(ат) классу(ам): ')
-        result = self.__classify(self.__get_image_class())
-        print(result)
-        return result
+        result1 = self.__classify(self.__get_image_class(self.sigmoid_neuron))
+        print(result1)
 
-    def __calculate_c_s(self):
-        res = self.__calculate_s(self.c_list_binary, self.sigmoid_neuron)
+        print('\n>> Сравним с функцией - ' + self.binary_neuron.function[0])
+
+        print('\n>> Входной(ые) суммарные сигналы С: ')
+        self.s_c_binary_list = self.__calculate_c_s(self.binary_neuron)
+
+        print('\n>> Согласно функции активации, изображение(я) принадлежит(ат) классу(ам): ')
+        result2 = self.__classify(self.__get_image_class(self.binary_neuron))
+        print(result2)
+
+        return result2
+
+    def __calculate_c_s(self, neuron):
+        res = self.__calculate_s(self.c_list_binary, neuron)
         return res
 
     def __classify(self, list):
@@ -136,11 +145,17 @@ class Calculating:
             result.append((tmp, r[1]))
         return result
 
-    def __get_image_class(self):
+    def __get_image_class(self, neuron):
         result = []
         for i in range(len(self.c_list_binary)):
-            res = self.sigmoid_neuron.function[1](self.s_c_binary_list[i][0], self.t)
-            result.append((round(res), self.s_c_binary_list[i][1]))
+            if neuron.function[0] == 'Бинарная':
+                res = neuron.function[1](self.s_c_binary_list[i][0], self.avg_binary)
+                result.append((round(res[0]), self.s_c_binary_list[i][1]))
+                print(round(res[0]))
+            else:
+                res = neuron.function[1](self.s_c_binary_list[i][0], self.avg_binary)
+                result.append((round(res), self.s_c_binary_list[i][1]))
+                print(round((res)))
         return result
 
     def __calculate_gemini(self, list_c, list_letters):
