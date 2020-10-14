@@ -57,6 +57,7 @@ class Calculator:
         print('\n>> Результат')
         return self.__image_class()
 
+    # Подсчёт сходства и вывод предположения о том, к какому классу будет относиться буква
     def __calculate_gemini(self):
         maximum = 0
         index = 0
@@ -76,6 +77,8 @@ class Calculator:
             print(s)
         print('Предположительно rs похожа на букву №' + str(index+1))
 
+    # Определяет класс изображения, вовзращая массив result,
+    # где единица находится на том месте, какому классу отноится изображение
     def __image_class(self):
         result = []
         for i in range(len(self.neurons)):
@@ -85,6 +88,7 @@ class Calculator:
             result.append(r)
         return result
 
+    # Помощь в подсчёте схожести (t - кол-во одинаковых символов для буквы а и б)
     def __help_gemini(self, letter_a, letter_b):
         t = 0
         for i in range(len(letter_a)):
@@ -92,6 +96,7 @@ class Calculator:
                 t += 1
         return t
 
+    # Подсчёт среднего значения для функции активации
     def __calculate_avgs(self):
         res = []
         for i in range(len(self.ss)):
@@ -102,6 +107,7 @@ class Calculator:
             print(tmp)
         self.avgs = res
 
+    # Подсчёт суммарных входных сигналов на нейронах для каждой буквы
     def __calculate_ss(self):
         res = []
         for i in range(len(self.letters_list)):
@@ -121,6 +127,7 @@ class Calculator:
             print(self.symbols[i] + ', s = ' + str(s))
         return s_list
 
+    # Подсчет суммарного входного сигнала символа RS на каждом из нейронов
     def __calculate_s_for_rs(self):
         result = []
         for i in range(len(self.letters_list)):
@@ -130,6 +137,7 @@ class Calculator:
             result.append(s)
         self.rs_s = result
 
+    # Вычисляет весовые коэффициенты для всех нейронов
     def __calculate_ws(self):
         res = []
         for i in range(len(self.letters_list)):
@@ -141,6 +149,7 @@ class Calculator:
             res.append(tmp)
         self.ws = res
 
+    # Вычисляет весовые коэффициенты для нейрона
     def __calculate_w(self, neuron, m_list):
         for i in range(len(m_list)):
             j = i + 1
@@ -150,6 +159,7 @@ class Calculator:
             neuron.correction_w_list(x_list, y, self.k)
         return neuron.w_list
 
+    # Создает список нейронов с бинарной функцией активации
     def __make_neurons(self):
         function = ActivationFunctionConst()
         count_input = len(self.letter_a2) + 1
@@ -161,6 +171,7 @@ class Calculator:
             res.append(neuron)
         self.neurons = res
 
+    # Создает обучающие выборки для всех классов букв
     def __make_all_m(self):
         res = []
         for i in range(5):
@@ -170,6 +181,9 @@ class Calculator:
             res.append(tmp)
         self.m = res
 
+    # Создает обучающую выборку,
+    # устанавливая y = 1 для пар букв на месте index,
+    # иначе y = 0
     def __make_m(self, index):
         result = []
         lst = self.__upd_binary_list()
@@ -190,6 +204,7 @@ class Calculator:
                 print(tmp2)
         return result
 
+    # Добавляет сдвиг (x[0])
     def __upd_binary_list(self):
         result = []
         for el in self.letters_list:
@@ -198,12 +213,14 @@ class Calculator:
             result.append((tmp1, tmp2))
         return result
 
+    # Создает лист буквы предназначенной для распознавания в бинарном представлении
     def __make_rs_list_binary(self):
         if self.letter_rs is not None:
             rs = copy_and_insert_one(self.letter_rs)
             print(rs)
             self.rs = rs
 
+    # Создает сисок из символов для обучения
     def __make_letters_list(self):
         self.letters_list = [
             (self.letter_a1, self.letter_a2),
