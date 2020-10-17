@@ -84,18 +84,18 @@ class MyWidger:
 
     def __set_functions_menu(self):
         self.__menu_frame = Frame(self.__window)
-        # self.__function_label = Label(self.__menu_frame, text='Функция: ')
-        # self.__function_label.grid(column=0, row=0)
-        #
-        # self.__var_options_menu = StringVar(self.__menu_frame)
-        # func = ActivationFunctionConst()
-        # functions = [func.bipolar_function[0], func.binary_function[0]]
-        # self.__var_options_menu.set(functions[0])
-        # self.__menu = OptionMenu(self.__menu_frame, self.__var_options_menu, *functions)
-        # self.__menu.grid(column=1, row=0)
-        #
-        # self.__button_ok_function = Button(self.__menu_frame, text='OK', width=1, command=self.__ok_button_click)
-        # self.__button_ok_function.grid(column=2, row=0)
+        self.__function_label = Label(self.__menu_frame, text='Функция: ')
+        self.__function_label.grid(column=0, row=0)
+
+        self.__var_options_menu = StringVar(self.__menu_frame)
+        func = ActivationFunctionConst()
+        functions = [func.bipolar_function[0], func.binary_function[0]]
+        self.__var_options_menu.set(functions[0])
+        self.__menu = OptionMenu(self.__menu_frame, self.__var_options_menu, *functions)
+        self.__menu.grid(column=1, row=0)
+
+        self.__button_ok_function = Button(self.__menu_frame, text='OK', width=1, command=self.__ok_button_click)
+        self.__button_ok_function.grid(column=2, row=0)
 
         self.__label_k_min = Label(self.__menu_frame, text='k =      0< ')
         self.__label_k_min.grid(column=0, row=0)
