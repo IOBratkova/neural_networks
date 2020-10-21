@@ -88,18 +88,36 @@ class Calculator:
         for i in range(len(self.letters_list)):
             j = i + 1
             s = 'Буква №' + str(j) + ': '
-            letter = copy_and_insert_one(self.letters_list[i][0])
-            tmp1 = self.__help_gemini(self.rs, letter)
-            s += str(tmp1) + ', '
-            letter = copy_and_insert_one(self.letters_list[i][1])
-            tmp2 = self.__help_gemini(self.rs, letter)
-            s += str(tmp2)
+            letter_a, letter_b = self.__make_two_letters(self.letters_list[i][0], self.letters_list[i][1])
+            tmp1 = self.__help_gemini(self.rs, letter_a)
+            tmp2 = self.__help_gemini(self.rs, letter_b)
+            s += str(tmp1) + ', ' + str(tmp2)
+            # letter = copy_and_insert_one(self.letters_list[i][0])
+            # tmp1 = self.__help_gemini(self.rs, letter)
+            # s += str(tmp1) + ', '
+            # letter = copy_and_insert_one(self.letters_list[i][1])
+            # tmp2 = self.__help_gemini(self.rs, letter)
+            # s += str(tmp2)
             max_tmp = tmp1 + tmp2
             if max_tmp >= maximum:
                 maximum = max_tmp
                 index = i
             print(s)
         print('Предположительно rs похожа на букву №' + str(index+1))
+
+    def __make_two_letters(self, letter_a, letter_b):
+        y = self.act_func[3]
+        if y == (1, 0):
+            a = copy_and_insert_one(letter_a)
+            b = copy_and_insert_one(letter_b)
+            return a, b
+        if y == (1, -1):
+            a = [-1 if not x else 1 for x in letter_a]
+            a.insert(0, 1)
+            b = [-1 if not x else 1 for x in letter_b]
+            b.insert(0, 1)
+            return a, b
+
 
     def __make_rs(self):
         y = self.act_func[3]
@@ -201,20 +219,20 @@ class Calculator:
     def __work_with_simple_neuron(self):
         print('\n>> Подсчет весовых коэффициентов для нейронов')
         self.__calculate_ws()
-        # print('\n>> Суммарные входные сигналы')
-        # self.__calculate_ss()
-        # print('\n>> Среднее арифметическое')
-        # self.__calculate_avgs()
 
     def __calculate_avgs(self):
         res = []
-        for i in range(len(self.ss)):
-            j = i + 1
-            tmp = statistics.mean(self.ss[i])
-            res.append(tmp)
-            print(str(j) + ': ', end='')
-            print(tmp)
-        self.avgs = res
+        tmp = ActivationFunctionConst().bipolar_delta_function
+        if self.act_func[0] != tmp[0]:
+            for i in range(len(self.ss)):
+                j = i + 1
+                tmp = statistics.mean(self.ss[i])
+                res.append(tmp)
+                print(str(j) + ': ', end='')
+                print(tmp)
+            self.avgs = res
+        else:
+            self.avgs = [0 for _ in range(5)]
 
     def __calculate_ss(self):
         res = []
@@ -286,24 +304,3 @@ class Calculator:
             flag, s = neuron.check_stop_rule()
             j += 1
             print('\ns = ' + str(s) + '. s <= eps? ' + str(flag))
-
-        # self.__help_adaline(self.neurons[0], self.m[0])
-        # # отработаем для нейрона №0
-        # print('\n>> Взяли 0 нейрон')
-        # neuron = self.neurons[0]  # берем 0 нейрон
-        # print('\n>> Взяли 0 обучающую выборку')
-        # m = self.m[0]  # берем 0 обучающую выборку
-        # print('\n>> Пащетали')
-        # neuron.w_list_old = copy.copy(neuron.w_list) # запомнили старый лист
-        # neuron.correction_w_list_with_adaline(m[0][0], m[0][1])  # x_list, u_out
-        # neuron.correction_w_list_with_adaline(m[1][0], m[1][1])  # x_list, u_out
-        # neuron.correction_w_list_with_adaline(m[2][0], m[2][1])  # x_list, u_out
-        # neuron.correction_w_list_with_adaline(m[3][0], m[3][1])  # x_list, u_out
-        # neuron.correction_w_list_with_adaline(m[4][0], m[4][1])  # x_list, u_out
-        # neuron.correction_w_list_with_adaline(m[5][0], m[5][1])  # x_list, u_out
-        # neuron.correction_w_list_with_adaline(m[6][0], m[6][1])  # x_list, u_out
-        # neuron.correction_w_list_with_adaline(m[7][0], m[7][1])  # x_list, u_out
-        # neuron.correction_w_list_with_adaline(m[8][0], m[8][1])  # x_list, u_out
-        # neuron.correction_w_list_with_adaline(m[9][0], m[9][1])  # x_list, u_out
-        # res = neuron.check_stop_rule()
-        # print(res)

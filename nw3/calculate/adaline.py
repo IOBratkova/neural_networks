@@ -7,9 +7,9 @@ import copy
 class Adaline(Neuron):
     def __init__(self, function, count_input, alpha=0.1):
         super().__init__(function, count_input)
-        # self.w_list = None
-        # self.w_list = [random.uniform(-0.5, 0.5) for _ in range(count_input)] пока заполним нулями
-        self.w_list_old = copy.copy(self.w_list)  # изначально w(old) = w(new)
+        self.w_list = None
+        self.w_list = [random.uniform(-0.01, 0.01) for _ in range(count_input)]
+        self.w_list_old = copy.copy(self.w_list)
         self.alpha = alpha
 
     def calculate_u_input(self, x_list):
