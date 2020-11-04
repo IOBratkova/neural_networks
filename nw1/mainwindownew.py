@@ -3,6 +3,7 @@ from tkinter import *
 
 from classes.controllernew import Controller
 from classes.grid import MyGrid
+from classes.functions import ActivationFunctionConst
 
 
 class MyWidger:
@@ -94,8 +95,8 @@ class MyWidger:
         self.__menu = OptionMenu(self.__menu_frame, self.__var_options_menu, *functions)
         self.__menu.grid(column=1, row=0)
 
-        self.__button_ok_function = Button(self.__menu_frame, text='OK', width=1, command=self.__ok_button_click)
-        self.__button_ok_function.grid(column=2, row=0)
+        # self.__button_ok_function = Button(self.__menu_frame, text='OK', width=1, command=self.__ok_button_click)
+        # self.__button_ok_function.grid(column=2, row=0)
 
         self.__label_k_min = Label(self.__menu_frame, text='k =      0< ')
         self.__label_k_min.grid(column=0, row=0)
