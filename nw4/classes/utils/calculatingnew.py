@@ -1,6 +1,6 @@
 import math
 import copy
-from classes.neuron import Neuron
+from classes.neurons.neuron import Neuron
 from classes.functions import ActivationFunctionConst
 
 

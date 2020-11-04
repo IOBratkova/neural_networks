@@ -1,6 +1,6 @@
 from tkinter import *
-from classes.grid import MyGrid
-from classes.controllernew import Controller
+from classes.utils.grid import MyGrid
+from classes.utils.controllernew import Controller
 import copy
 
 
@@ -62,12 +62,12 @@ class Widget:
         self.__const_a1 = copy.deepcopy(self.__my_grid.titles)
         print(self.__controller.algorithm.letter_a1)
 
-    def __read_letter_a2(self):
-        print('\n>> A2 считан')
-        self.__controller.read_letter_a2(self.__my_grid.titles)
-        self.__var_check_a2.set(1)
-        self.__const_a2 = copy.deepcopy(self.__my_grid.titles)
-        print(self.__controller.algorithm.letter_a2)
+    # def __read_letter_a2(self):
+    #     print('\n>> A2 считан')
+    #     self.__controller.read_letter_a2(self.__my_grid.titles)
+    #     self.__var_check_a2.set(1)
+    #     self.__const_a2 = copy.deepcopy(self.__my_grid.titles)
+    #     print(self.__controller.algorithm.letter_a2)
 
     def __read_letter_b1(self):
         print('\n>> В1 считан')
@@ -76,12 +76,12 @@ class Widget:
         self.__const_b1 = copy.deepcopy(self.__my_grid.titles)
         print(self.__controller.algorithm.letter_b1)
 
-    def __read_letter_b2(self):
-        print('\n>> В2 считан')
-        self.__controller.read_letter_b2(self.__my_grid.titles)
-        self.__var_check_b2.set(1)
-        self.__const_b2 = copy.deepcopy(self.__my_grid.titles)
-        print(self.__controller.algorithm.letter_b2)
+    # def __read_letter_b2(self):
+    #     print('\n>> В2 считан')
+    #     self.__controller.read_letter_b2(self.__my_grid.titles)
+    #     self.__var_check_b2.set(1)
+    #     self.__const_b2 = copy.deepcopy(self.__my_grid.titles)
+    #     print(self.__controller.algorithm.letter_b2)
 
     def __read_letter_c(self):
         print('\n>> С считан')
@@ -161,12 +161,12 @@ class Widget:
         self.__pattern_frame = Frame(self.__window)
         self.__button_a1 = Button(self.__pattern_frame, text='А1', width=5, command=self.__set_const_a1)
         self.__button_a1.grid(column=0, row=0)
-        self.__button_a2 = Button(self.__pattern_frame, text='А2', width=5, command=self.__set_const_a2)
-        self.__button_a2.grid(column=0, row=1)
+        # self.__button_a2 = Button(self.__pattern_frame, text='А2', width=5, command=self.__set_const_a2)
+        # self.__button_a2.grid(column=0, row=1)
         self.__button_b1 = Button(self.__pattern_frame, text='B1', width=5, command=self.__set_const_b1)
         self.__button_b1.grid(column=0, row=2)
-        self.__button_b2 = Button(self.__pattern_frame, text='B2', width=5, command=self.__set_const_b2)
-        self.__button_b2.grid(column=0, row=3)
+        # self.__button_b2 = Button(self.__pattern_frame, text='B2', width=5, command=self.__set_const_b2)
+        # self.__button_b2.grid(column=0, row=3)
         self.__button_c = Button(self.__pattern_frame, text='C', width=5, command=self.__set_const_c)
         self.__button_c.grid(column=0, row=6)
         self.__pattern_frame.place(x=370, y=15)
@@ -182,13 +182,13 @@ class Widget:
                                               state=DISABLED)
         self.__check_memento_a1.grid(column=1, row=0)
 
-        self.__button_memento_a2 = Button(self.__memento_frame, text='Запомнить А2', width=15,
-                                          command=self.__read_letter_a2)
-        self.__button_memento_a2.grid(column=0, row=1)
-        self.__var_check_a2 = IntVar(0)
-        self.__check_memento_a2 = Checkbutton(self.__memento_frame, variable=self.__var_check_a2, onvalue=1, offvalue=0,
-                                              state=DISABLED)
-        self.__check_memento_a2.grid(column=1, row=1)
+        # self.__button_memento_a2 = Button(self.__memento_frame, text='Запомнить А2', width=15,
+        #                                   command=self.__read_letter_a2)
+        # self.__button_memento_a2.grid(column=0, row=1)
+        # self.__var_check_a2 = IntVar(0)
+        # self.__check_memento_a2 = Checkbutton(self.__memento_frame, variable=self.__var_check_a2, onvalue=1, offvalue=0,
+        #                                       state=DISABLED)
+        # self.__check_memento_a2.grid(column=1, row=1)
 
         self.__button_memento_b1 = Button(self.__memento_frame, text='Запомнить B1', width=15,
                                           command=self.__read_letter_b1)
@@ -198,13 +198,13 @@ class Widget:
                                               state=DISABLED)
         self.__check_memento_b1.grid(column=1, row=2)
 
-        self.__button_memento_b2 = Button(self.__memento_frame, text='Запомнить B2', width=15,
-                                          command=self.__read_letter_b2)
-        self.__button_memento_b2.grid(column=0, row=3)
-        self.__var_check_b2 = IntVar(0)
-        self.__check_memento_b2 = Checkbutton(self.__memento_frame, variable=self.__var_check_b2, onvalue=1, offvalue=0,
-                                              state=DISABLED)
-        self.__check_memento_b2.grid(column=1, row=3)
+        # self.__button_memento_b2 = Button(self.__memento_frame, text='Запомнить B2', width=15,
+        #                                   command=self.__read_letter_b2)
+        # self.__button_memento_b2.grid(column=0, row=3)
+        # self.__var_check_b2 = IntVar(0)
+        # self.__check_memento_b2 = Checkbutton(self.__memento_frame, variable=self.__var_check_b2, onvalue=1, offvalue=0,
+        #                                       state=DISABLED)
+        # self.__check_memento_b2.grid(column=1, row=3)
 
         self.__button_memento_c = Button(self.__memento_frame, text='Запомнить C', width=15,
                                          command=self.__read_letter_c)
@@ -226,7 +226,7 @@ class Widget:
         self.__teach_button.grid(column=0, row=2)
         self.__recognize_button = Button(self.__algorithm_frame, text='Распознать', width=25, command=self.__recognize)
         self.__recognize_button.grid(column=0, row=3)
-        self.__algorithm_frame.place(x=370, y=150)
+        self.__algorithm_frame.place(x=370, y=105)
 
     def __set_answer_box(self):
         self.__answer_box_frame = Frame(self.__window)
@@ -236,13 +236,13 @@ class Widget:
         self.__b_radiobutton.set(0)
         self.__result_label = Label(self.__answer_box_frame, text='Результат: ')
         self.__result_label.grid(column=1, row=0)
-        self.__radiobutton_a = Radiobutton(self.__answer_box_frame, text='A1/A2',
+        self.__radiobutton_a = Radiobutton(self.__answer_box_frame, text='A1',
                                            variable=self.__a_radiobutton, value=1, state=DISABLED)
         self.__radiobutton_a.grid(column=2, row=0)
-        self.__radiobutton_b = Radiobutton(self.__answer_box_frame, text='B1/B2',
+        self.__radiobutton_b = Radiobutton(self.__answer_box_frame, text='B1',
                                            variable=self.__b_radiobutton, value=1, state=DISABLED)
         self.__radiobutton_b.grid(column=3, row=0)
-        self.__answer_box_frame.place(x=370, y=270)
+        self.__answer_box_frame.place(x=370, y=215)
 
     def __clear(self):
         print('\n>> Очищено поле рисования')
@@ -258,14 +258,15 @@ class Widget:
     def __teach_neuron(self):
         if self.__controller.algorithm.letter_a1 is None:
             print('\n>> Символ A1 не введён')
-        elif self.__controller.algorithm.letter_a2 is None:
-            print('\n>> Символ A2 не введён')
+        # elif self.__controller.algorithm.letter_a2 is None:
+        #     print('\n>> Символ A2 не введён')
         elif self.__controller.algorithm.letter_b1 is None:
             print('\n>> Символ B1 не введён')
-        elif self.__controller.algorithm.letter_b2 is None:
-            print('\n>> Символ B2 не введён')
+        # elif self.__controller.algorithm.letter_b2 is None:
+        #     print('\n>> Символ B2 не введён')
         else:
             pass
+            self.__controller.teach_neuron()
             # print('\n>> Вычисления при k = ', self.__value_k.get())
             # self.__controller.teach_neuron(float(self.__value_k.get()))
 

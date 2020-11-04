@@ -4,8 +4,6 @@
 #from mainwindow import Widget
 from mainwindow import Widget
 
-from classes.neuron import Neuron
-
 if __name__ == '__main__':
     window = Widget()
     window.start()
