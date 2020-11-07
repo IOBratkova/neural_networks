@@ -18,8 +18,8 @@ class Controller:
         # TODO: СМОТРИ НИЖЕ
         # Добавить диапазон весовых коэффициентов
         # Добавить кол-во нейронов А-слоя
-        w_range = (0.1, 0.3)
-        a_count = 9
+        w_range = (0.0, 1.0)
+        a_count = 12
         self.algorithm.teaching(w_range, a_count)
 
     def recognize(self):
