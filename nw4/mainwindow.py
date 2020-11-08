@@ -41,7 +41,7 @@ class Widget:
         self.__set_memento_buttons()
         self.__set_other_buttons()
         self.__set_answer_box()
-        # self.__set_functions_menu()
+        self.__set_w_range()
         self.__set_const()
 
     def __set_const_letter(self, matrix):
@@ -117,9 +117,9 @@ class Widget:
 
     def __set_const(self):
         self.__const_a1 = [[1, 0, 0, 0, 1], [1, 0, 0, 1, 1], [1, 0, 1, 0, 1], [1, 1, 0, 0, 1], [1, 0, 0, 0, 1]]
-        self.__const_a2 = [[1, 0, 0, 1, 1], [1, 0, 0, 1, 1], [1, 0, 1, 0, 1], [1, 1, 0, 0, 1], [1, 1, 0, 0, 1]]
-        self.__const_b1 = [[0, 1, 1, 1, 0], [1, 0, 0, 0, 1], [1, 0, 0, 0, 1], [1, 0, 0, 0, 1], [0, 1, 1, 1, 0]]
-        self.__const_b2 = [[1, 1, 1, 1, 1], [1, 0, 0, 0, 1], [1, 0, 0, 0, 1], [1, 0, 0, 0, 1], [1, 1, 1, 1, 1]]
+        # self.__const_a2 = [[1, 0, 0, 1, 1], [1, 0, 0, 1, 1], [1, 0, 1, 0, 1], [1, 1, 0, 0, 1], [1, 1, 0, 0, 1]]
+        self.__const_b1 = [[0, 1, 1, 1, 0], [1, 0, 0, 0, 1], [1, 0, 0, 0, 1], [1, 1, 1, 1, 1], [1, 0, 0, 0, 1]]
+        # self.__const_b2 = [[1, 1, 1, 1, 1], [1, 0, 0, 0, 1], [1, 0, 0, 0, 1], [1, 0, 0, 0, 1], [1, 1, 1, 1, 1]]
         self.__const_c =  [[1, 0, 1, 1, 1], [1, 0, 0, 1, 1], [1, 0, 1, 0, 1], [1, 1, 0, 0, 1], [1, 1, 1, 1, 1]]
 
     def __set_grid(self):
@@ -216,17 +216,43 @@ class Widget:
 
         self.__memento_frame.place(x=420, y=15)
 
+    def __set_w_range(self):
+        self.__w_frame = Frame(self.__window)
+        self.__label_k_min = Label(self.__w_frame, text='W-range')
+        self.__label_k_min.grid(column=0, row=0)
+        self.__value_from = DoubleVar()
+        self.__value_from.set(0.0)
+        self.__value_to = DoubleVar()
+        self.__value_to.set(1.0)
+        self.__entry_from = Entry(self.__w_frame, textvariable=self.__value_from, width=5)
+        self.__entry_to = Entry(self.__w_frame, textvariable=self.__value_to, width=5)
+        self.__entry_from.grid(column=1, row=0)
+        self.__entry_to.grid(column=2, row=0)
+
+        self.__label_count_a = Label(self.__w_frame, text='Кол-во А-элем. (до 25)')
+        self.__count_a = IntVar()
+        self.__count_a.set(12)
+        self.__count_a_entry = Entry(self.__w_frame, textvariable=self.__count_a, width=5)
+        self.__label_count_a.grid(column=1, row=1)
+        self.__count_a_entry.grid(column=2, row=1)
+
+
+        self.__w_frame.place(x=370, y=105)
+
     def __set_other_buttons(self):
         self.__algorithm_frame = Frame(self.__window)
+
+
+
         self.__clean_button = Button(self.__algorithm_frame, text='Очистить поле', width=25, command=self.__clear)
-        self.__clean_button.grid(column=0, row=0)
+        self.__clean_button.grid(column=0, row=2)
         self.__clean_all = Button(self.__algorithm_frame, text='Очистить всё', width=25, command=self.__clear_all)
-        self.__clean_all.grid(column=0, row=1)
+        self.__clean_all.grid(column=0, row=3)
         self.__teach_button = Button(self.__algorithm_frame, text='Обучить', width=25, command=self.__teach_neuron)
-        self.__teach_button.grid(column=0, row=2)
+        self.__teach_button.grid(column=0, row=4)
         self.__recognize_button = Button(self.__algorithm_frame, text='Распознать', width=25, command=self.__recognize)
-        self.__recognize_button.grid(column=0, row=3)
-        self.__algorithm_frame.place(x=370, y=105)
+        self.__recognize_button.grid(column=0, row=5)
+        self.__algorithm_frame.place(x=370, y=150)
 
     def __set_answer_box(self):
         self.__answer_box_frame = Frame(self.__window)
@@ -242,7 +268,7 @@ class Widget:
         self.__radiobutton_b = Radiobutton(self.__answer_box_frame, text='B1',
                                            variable=self.__b_radiobutton, value=1, state=DISABLED)
         self.__radiobutton_b.grid(column=3, row=0)
-        self.__answer_box_frame.place(x=370, y=215)
+        self.__answer_box_frame.place(x=370, y=260)
 
     def __clear(self):
         print('\n>> Очищено поле рисования')
@@ -265,8 +291,14 @@ class Widget:
         # elif self.__controller.algorithm.letter_b2 is None:
         #     print('\n>> Символ B2 не введён')
         else:
-            pass
-            self.__controller.teach_neuron()
+            w_range = float(self.__value_from.get()), float(self.__value_to.get())
+            a_count = int( self.__count_a.get())
+            print('ПОЕХАЛИ')
+            for i in range(3):
+                print('==================================================================\n')
+                print('==================================================================\n')
+                print('==================================================================\n')
+                self.__controller.teach_neuron(w_range, a_count)
             # print('\n>> Вычисления при k = ', self.__value_k.get())
             # self.__controller.teach_neuron(float(self.__value_k.get()))
 

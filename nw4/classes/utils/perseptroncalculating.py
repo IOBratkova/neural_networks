@@ -7,9 +7,9 @@ import copy
 class Calculating:
     def __init__(self):
         self.SUB = str.maketrans("0123456789", "₀₁₂₃₄₅₆₇₈₉")
-        self.ny = 0.1
-        self.letter_a1 = [1, 1, 1, 1, 0, 1, 1, 0, 1], 'П'
-        self.letter_b1 = [1, 0, 1, 1, 1, 1, 1, 0, 1], 'Н'
+        self.ny = 0.2
+        self.letter_a1 = None #[1, 1, 1, 1, 0, 1, 1, 0, 1], 'П'
+        self.letter_b1 = None #[1, 0, 1, 1, 1, 1, 1, 0, 1], 'Н'
         self.letter_c = None
         self.letters_array = None  #
         self.m_array = None
@@ -30,16 +30,31 @@ class Calculating:
         self.input_count = len(self.letter_a1[0])
         self.letters_array = [self.letter_a1, self.letter_b1]
         self.m_array = self.make_m_binary()
+        print('\nА-элементов = ' + str(count_a))
+        print('S-элементов = ' + str(self.input_count))
+        print('Диапазон весов = ' + str(w_range) + '\n')
         self.perceptron = Perceptron(self.input_count, count_a, w_range)
+#        self.perceptron.print_info()
         self.excitatory_neurons = self.get_excitatory_neurons()
         self.a_inputs_signals = self.get_a_elements_input_signals()
         self.threshold_info()
         self.check_threshold()
         self.get_r_elements_input_signals()
-        self.gamma_correction()
+        self.gamma_correct()
+
+    def gamma_correct(self):
+        if len(self.flags) == 0:
+            print('Неудачно попрошла настройка.\n'
+                  'Нажмите повторно кнопку "Обучить" или введите перед этим новые параметры.')
+        else:
+            if not self.flags[0]:
+                print('Настройка перцептрона по гамма-системе: ')
+                self.gamma_correction()
+            else:
+                print('Перецептрон теперь умный и готов что-нибудь распознать!')
 
     def threshold_info(self):
-        #self.threshold_all = self.get_threshold_value_for_all()
+        self.threshold_all = self.get_threshold_value_for_all()
         self.threshold_one = self.get_threshold_value_for_neurons()
 
     def get_threshold_value_for_all(self):
@@ -92,7 +107,10 @@ class Calculating:
         self.r_input_signals.append(res)
         s = 'Вектор UвхR = ' + str(res)
         teta = numpy.average(res)
-        s += '. Пороговое значение, Rθ = ' + str(teta) + '. '
+        s += '. Пороговое значение, Rθ = ' + str(teta) + '.\n'
+        s += 'Таким образом: ' + str(res[0])
+        s += ' >= ' + str(teta)
+        s += ' > ' + str(res[1]) + '. '
         info = [1 if res[i] >= teta else -1 for i in range(len(res))]
         s += '\nПри подаче исходных сообщений имеем: ' + str(info)
         s += '. Изначально имеем: ' + str([self.m_array[0][1], self.m_array[1][1]]) + ' => '
@@ -110,8 +128,7 @@ class Calculating:
 
     def check_threshold(self):
         result = [(self.check_threshold_one(), 'Индивидуальные пороги')
-                  #(self.check_threshold_all(), 'Один порог для всех')
-                  ]
+                  ,(self.check_threshold_all(), 'Один порог для всех')]
         if result[0] is None and result[1] is None:
             print('Беда...')
         self.threshold_array = [el for el in result if el[0] is not None]
@@ -124,7 +141,7 @@ class Calculating:
         res2 = [1 if b[i] >= self.threshold_one[i] else 0 for i in range(len(self.threshold_one))]
         print(str(self.letters_array[0][1]) + ': ' + str(res1))
         print(str(self.letters_array[1][1]) + ': ' + str(res2))
-        return [res1, res2] #if self.answer_about_teta(res1, res2, 'Индивидуальные пороги для всех нейронов') else None
+        return [res1, res2] if self.answer_about_teta(res1, res2, 'Индивидуальные пороги для всех нейронов') else None
 
     def check_threshold_all(self):
         print('\nОдин порог для всех А-элементов: ')
@@ -132,15 +149,25 @@ class Calculating:
         res2 = [1 if uin >= self.threshold_all else 0 for uin in self.a_inputs_signals[1]]
         print(str(self.letters_array[0][1]) + ': ' + str(res1))
         print(str(self.letters_array[1][1]) + ': ' + str(res2))
-        return [res1, res2] #if self.answer_about_teta(res1, res2,
-                             #                         'Один порог для всех нейронов') else None
+        return [res1, res2] if self.answer_about_teta(res1, res2,
+                                                      'Один порог для всех нейронов') else None
 
     def answer_about_teta(self, res1, res2, info=''):
         res = numpy.sum([1 if res1[i] == res2[i] else 0 for i in range(len(res1))])
+        one_tri = self.input_count / 3
         y = True if res == 0 else False
-        print('Условие типа \"' + info + '\" удовлетворяет требованиям\n') \
-            if y else print('Условие типа \"' + info + '\" _НЕ_ удовлетворяет требованиям\n')
-        return y
+        if y:
+            print('Все нейроны реагируют по-разному')
+            print('Условие типа \"' + info + '\" удовлетворяет требованиям\n') \
+                if y else print('Условие типа \"' + info + '\" _НЕ_ удовлетворяет требованиям\n')
+            return y
+
+        y = True if res > one_tri else False
+        if y:
+            print('Не больше одной трети нейронов реагирует по-разному')
+            print('Условие типа \"' + info + '\" удовлетворяет требованиям\n') \
+                if y else print('Условие типа \"' + info + '\" _НЕ_ удовлетворяет требованиям\n')
+            return y
 
     def make_m_binary(self):
         result = []
@@ -154,11 +181,8 @@ class Calculating:
     def gamma_correction(self):
         r = copy.copy(self.r_input_signals[0])
         ta = copy.copy(self.threshold_array[0][0])
-        to = copy.copy(self.r_input_signals_teta[0]) #copy.copy( self.threshold_one)
-        self.perceptron.gamma_correction(r, 0.1, ta, to)
-#        self.perceptron.gamma_correction3(r, 0.1, ta, to)
-
-
+        to = copy.copy(self.r_input_signals_teta[0])
+        self.perceptron.gamma_correction(r, 0.5, ta, to)
 
     def recognition(self):
         pass

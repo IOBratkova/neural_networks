@@ -1,11 +1,10 @@
 import random
 import numpy
 import copy
-import math
 
 
 class Perceptron:
-    def __init__(self, count_s, count_a, w_range=(0.1, 0.9)):
+    def __init__(self, count_s, count_a, w_range=(0.0, 0.1)):
         self.SUB = str.maketrans("0123456789", "₀₁₂₃₄₅₆₇₈₉")
         self.s_array = [0 for _ in range(count_s)]
         self.a_array = [0 for _ in range(count_a)]
@@ -30,9 +29,10 @@ class Perceptron:
             ts = []
             for j in range(len(self.s_array)):
                 t = lst[j] * self.s_a_matrix[i][j]
-                ts.append(round(t, 1))
+                ts.append(t)
+                # ts.append(round(t, 1))
             r = numpy.sum(ts)
-            res.append(round(r, 1))
+            res.append(r)
         return res
 
     def u_input_r(self, lst):
@@ -62,17 +62,24 @@ class Perceptron:
         print(s)
         l = 0
         flag = False
+
+        teta_new = copy.copy(teta)
+
         while not flag:
             k = l + 1
             print('t' + str(k).translate(self.SUB) + ':\n')
-            activ = self.select_element(teta, uvh_array, l)
+            #activ = self.select_element(teta, uvh_array, l)
+            activ = self.select_element(teta_new, uvh_array, l)
             #tmp = [0 if el == 1 else 1 for el in element[activ]]
             if activ is None:
                 print('канец')
                 return
             self.calc_Ilia(tmp_elem[activ], self.a_r_matrix, nyt) # tmp =>> element[activ]
-            #uvh_array[activ] = self.u_input_r(element[activ])
-            uvh_array = [self.u_input_r(element[i]) for i in range(len(element))]
+            uvh_array[activ] = self.u_input_r(element[activ])
+
+            #teta_new = numpy.average(uvh_array)
+
+            #uvh_array = [self.u_input_r(element[i]) for i in range(len(element))]
             s = 'Сумма UвхR = ' + str(numpy.sum(self.a_r_matrix)) + '\n'
             print(s)
             l += 1
@@ -207,9 +214,12 @@ class Perceptron:
 
     def gamma_correction3(self, uvh_array, nyt, element, teta):
         current_w = copy.copy(self.a_r_matrix)
-        current_w = [round(c, 2) for c in current_w]
         uvr1 = uvh_array[0]
         uvr2 = uvh_array[1]
+
+        tmp_elem = []
+        tmp_elem.append(element[0])
+        tmp_elem.append([0 if v == 1 else 1 for v in element[1]])
         summuvr = uvr1 + uvr2
         s = 'UвхR = ' + str(uvh_array) + '\n'
         s += 'Начальные веса: ' + str(current_w) + '\n'
@@ -225,7 +235,7 @@ class Perceptron:
             if activ is None:
                 print('канец')
                 return
-            tmp, tmp2 = self.calculate_delta_w_list(current_w, not_update_w0, element[activ], nyt)
+            tmp, tmp2 = self.calculate_delta_w_list(current_w, not_update_w0, tmp_elem[activ], nyt)
             not_update_w0 = copy.copy(tmp2)
             current_w = copy.copy(tmp)
             self.a_r_matrix = copy.copy(tmp)
@@ -268,9 +278,9 @@ class Perceptron:
 
         for i in range(len(current_w)):
             if i in active:
-                current_w[i] -= dws[i]
-            if i in passive:
                 current_w[i] += dws[i]
+            if i in passive:
+                current_w[i] -= dws[i]
 
             current_w[i] = round(current_w[i], 2)
 
@@ -287,6 +297,14 @@ class Perceptron:
         print(numpy.sum(current_w))
 
         return current_w, not_update_w
+
+
+
+
+
+
+
+
 
 
 
