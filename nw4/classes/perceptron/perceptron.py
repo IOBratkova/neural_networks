@@ -9,28 +9,16 @@ class Perceptron:
         self.s_array = [0 for _ in range(count_s)]
         self.a_array = [0 for _ in range(count_a)]
         self.r = None
-        self.s_a_matrix = [[random.uniform(w_range[0], w_range[1]) for _ in range(len(self.s_array))] for _ in range(len(self.a_array))] #[[0.1 if i % 2 == 0 else 0.5 for i in range(len(self.s_array))] for _ in range(len(self.a_array))]
-            # [[0.3, 0.2, 0.1, 0.6, 0.5, 0.4, 0.9, 0.6, 0.7],
-            #                [0.2, 0.1, 0.3, 0.4, 0.5, 0.6, 0.7, 0.1, 0.9],
-            #                [0.3, 0.5, 0.1, 0.6, 0.3, 0.4, 0.9, 0.4, 0.7], #пятый зменен с 0.3 на 0.5
-            #                [0.4, 0.3, 0.2, 0.1, 0.8, 0.7, 0.6, 0.6, 0.9],
-            #                [0.5, 0.3, 0.3, 0.6, 0.1, 0.2, 0.9, 0.2, 0.7],
-            #                [0.6, 0.5, 0.4, 0.1, 0.2, 0.3, 0.8, 0.5, 0.8]
-            #                ]
-
-        self.a_r_matrix =[random.uniform(w_range[0], w_range[1]) for _ in range(len(self.a_array))] #[0.1 if i % 2 == 0 else 0.2 for i in range(len(self.a_array))]
-            # [0.2, 0.8, 0.6, 0.9, 0.8, 0.1]
-
+        self.s_a_matrix = [[random.uniform(w_range[0], w_range[1]) for _ in range(len(self.s_array))] for _ in range(len(self.a_array))]
+        self.a_r_matrix =[random.uniform(w_range[0], w_range[1]) for _ in range(len(self.a_array))]
 
     def u_input_all_a(self, lst):
-        # tmp = [lst[j] * self.s_a_matrix[i][j] for j in range(len(self.s_array))]
         res = []
         for i in range(len(self.a_array)):
             ts = []
             for j in range(len(self.s_array)):
                 t = lst[j] * self.s_a_matrix[i][j]
                 ts.append(t)
-                # ts.append(round(t, 1))
             r = numpy.sum(ts)
             res.append(r)
         return res
@@ -68,21 +56,16 @@ class Perceptron:
         while not flag:
             k = l + 1
             print('t' + str(k).translate(self.SUB) + ':\n')
-            #activ = self.select_element(teta, uvh_array, l)
             activ = self.select_element(teta_new, uvh_array, l)
-            #tmp = [0 if el == 1 else 1 for el in element[activ]]
             if activ is None:
                 print('канец')
-                return
+                return uvh_array
             self.calc_Ilia(tmp_elem[activ], self.a_r_matrix, nyt) # tmp =>> element[activ]
             uvh_array[activ] = self.u_input_r(element[activ])
-
-            #teta_new = numpy.average(uvh_array)
-
-            #uvh_array = [self.u_input_r(element[i]) for i in range(len(element))]
             s = 'Сумма UвхR = ' + str(numpy.sum(self.a_r_matrix)) + '\n'
             print(s)
             l += 1
+
 
     def gamma_correction2(self, uvh_array, nyt, element, teta):
         current_w = copy.copy(self.a_r_matrix)
