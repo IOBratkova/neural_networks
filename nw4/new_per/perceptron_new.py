@@ -51,40 +51,63 @@ class Perceptron:
 
 
     def gamma_correction(self, uvh_array, nyt, element, teta):
-        current_w = copy.copy(self.a_r_matrix)
-        uvr1 = uvh_array[0]
-        uvr2 = uvh_array[1]
-
-        tmp_elem = []
-        tmp_elem.append(element[0])
-        tmp_elem.append([0 if v == 1 else 1 for v in element[1]])
-        summuvr = uvr1 + uvr2
-        s = 'UвхR = ' + str(uvh_array) + '\n'
-        s += 'Начальные веса: ' + str(current_w) + '\n'
-        s += 'Сумма UвхR = ' + str(summuvr) + '\n'
-        print(s)
-        l = 0
-        flag = False
-
         teta_new = copy.copy(teta)
 
         megaiter = 0
         for i in range(len(element)):
             tmp_elem = []
-            tmp_elem.append(element[i])
             for j in range(len(element)):
                 if i != j:
                     tmp_elem.append([0 if v == 1 else 1 for v in element[j]])
+                else:
+                    tmp_elem.append(element[i])
             l = 0
+            lastSignal = uvh_array[i][i]
             while True:
                 k = megaiter + 1
                 print('t' + str(k).translate(self.SUB) + ':\n')
-                activ = self._select_element(teta_new[i], uvh_array, l, i)
+                activ = self._select_element(teta_new[i], uvh_array[i], l, i)
                 if activ is None:
                     print('канец')
                     break
-                self.calc_Ilia(tmp_elem[activ], self.a_r_matrix[i], nyt)  # tmp =>> element[activ]
-                uvh_array[activ] = self.u_input_r(element[activ], i)
+                self.calc_Ilia(tmp_elem[activ], self.a_r_matrix[i], nyt)
+
+                for z in range(len(uvh_array[i])):
+                    uvh_array[i][z] = self.u_input_r(element[z], i)
+
+                # if lastSignal < uvh_array[i][i]:
+                #     self.calc_Ilia(tmp_elem[i], self.a_r_matrix[i], nyt)
+                #     for z in range(len(uvh_array[i])):
+                #         uvh_array[i][z] = self.u_input_r(element[z], i)
+                # lastSignal = uvh_array[i][i]
+
+                # if not self.__requiredContinue(teta_new[i], uvh_array[i], i):
+                #     print('канец')
+                #     break
+                #
+                # bestIndex = -1
+                # bestValue = -1
+                # matrix = copy.copy(self.a_r_matrix[i])
+                # for image in range(len(tmp_elem)):
+                #     self.calc_Ilia(tmp_elem[image], self.a_r_matrix[i], nyt)
+                #     value = 0
+                #     for z in range(len(uvh_array[i])):
+                #         if z == i:
+                #             value += self.u_input_r(element[z], i) - uvh_array[i][z]
+                #         else:
+                #             value += uvh_array[i][z] - self.u_input_r(element[z], i)
+                #     if value > bestValue:
+                #         bestValue = value
+                #         bestIndex = image
+                #     self.a_r_matrix[i] = copy.copy(matrix)
+                #
+                # if bestValue < 1e-7:
+                #     bestIndex = self._select_element(teta_new[i], uvh_array[i], l, i)
+                #
+                # self.calc_Ilia(tmp_elem[bestIndex], self.a_r_matrix[i], nyt)
+                # for z in range(len(uvh_array[i])):
+                #     uvh_array[i][z] = self.u_input_r(element[z], i)
+
                 s = 'Сумма UвхR = ' + str(numpy.sum(self.a_r_matrix)) + '\n'
                 print(s)
                 l += 1
@@ -102,6 +125,21 @@ class Perceptron:
         if len(list_inv) == 0:
             return None
         return list_inv[l % len(list_inv)]
+
+    def __requiredContinue(self, teta, uvh, imagen):
+        list_inv = []
+        if uvh[imagen] < teta:
+            list_inv.append(imagen)
+        for i in range(len(uvh)):
+            if i == imagen:
+                continue
+            if uvh[i] >= teta:
+                list_inv.append(i)
+        if len(list_inv) == 0:
+            return False
+        return True
+
+
 
 
     def select_element(self, teta, uvh, l):
@@ -132,10 +170,10 @@ class Perceptron:
             if abs(w - 1) < eps and i in active:
                 active.remove(i)
                 continue
-            if abs(w - 0) < eps and i in passive:
+            if abs(w + 1) < eps and i in passive:
                 passive.remove(i)
                 continue
-            max_dw = 1 - w if i in active else w
+            max_dw = 1 - w if i in active else w + 1
             if dw > max_dw:
                 dw = max_dw
                 if i in active:

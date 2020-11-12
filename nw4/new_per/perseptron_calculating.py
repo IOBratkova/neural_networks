@@ -1,4 +1,5 @@
 import random
+import sys
 
 from classes.utils.utils import *
 from new_per.perceptron_new import Perceptron
@@ -52,18 +53,26 @@ class Calculating:
         print('\nА-элементов = ' + str(count_a))
         print('S-элементов = ' + str(count_s))
         print('Диапазон весов = ' + str(w_range) + '\n')
-        self.perceptron = Perceptron(count_s, count_a, count_r, w_range)
-        #self.omegamind_init()
-        self.excitatory_neurons = self.__get_excitatory_neurons()
-        self.a_inputs_signals = self.__get_a_elements_input_signals()
-        self.all_signals = self.__get_threshold_value_for_neurons()
-        self.all_r_signals, self.teta_r = self.__calculate_r()
 
+        result = None
+        okey = False
+        while not okey:
+            okey = True
+            self.perceptron = Perceptron(count_s, count_a, count_r, w_range)
+            #self.omegamind_init()
+            self.excitatory_neurons = self.__get_excitatory_neurons()
+            self.a_inputs_signals = self.__get_a_elements_input_signals()
+            self.all_signals = self.__get_threshold_value_for_neurons()
+            if len(self.all_signals) == 0:
+                okey = False
+                continue
 
-
-        # r = copy.copy(self.r_input_signals[0])
-        # ta = copy.copy(self.threshold_array[0][0])
-        # to = copy.copy(self.r_input_signals_teta[0])
+            result = self.__calculate_r()
+            if result is None:
+                okey = False
+                continue
+        self.all_r_signals = result[0]
+        self.teta_r = result[1]
         uvh_array = self.perceptron.gamma_correction(self.all_r_signals, 0.1, self.all_signals, self.teta_r)
 
     def omegamind_init(self):
@@ -76,22 +85,86 @@ class Calculating:
                 row[i] = 1 if row[i] > 1 else row[i]
         pass
 
+    def __sub_signals(self, a, b):
+        #1 - 1 = 0, 0 - 1 = 0, 1 - 0 = 1, 0 - 0 = 0
+        return [1 if a[i] == 1 and b[i] == 0 else 0 for i in range(len(a))]
+
     def __calculate_r(self):
-        res = []
-        for i in range(len(self.perceptron.a_r_matrix)):
-            t0 = self.perceptron.u_input_r(self.all_signals[0], i)
-            t1 = self.perceptron.u_input_r(self.all_signals[1], i)
-            t2 = self.perceptron.u_input_r(self.all_signals[2], i)
-            res.append([t0, t1, t2])
-        print('эрочки (от слова "эротика"): \n')
-        print(res)
-        teta0 = numpy.average(res[0])
-        teta1 = numpy.average(res[1])
-        teta2 = numpy.average(res[2])
-        res = []
-        for i in range(len(self.perceptron.a_r_matrix)):
-            res.append(self.perceptron.u_input_r(self.all_signals[i], i))
-        return res, [teta0, teta1, teta2]
+        a = self.all_signals[0]
+        b = self.all_signals[1]
+        c = self.all_signals[2]
+
+        ab = numpy.sum(self.__sub_signals(a, b))
+        ac = numpy.sum(self.__sub_signals(a, c))
+        a_av = numpy.average([ab, ac])
+
+        ba = numpy.sum(self.__sub_signals(b, a))
+        bc = numpy.sum(self.__sub_signals(b, c))
+        b_av = numpy.average([ba, bc])
+
+        ca = numpy.sum(self.__sub_signals(c, a))
+        cb = numpy.sum(self.__sub_signals(c, b))
+        c_av = numpy.average([ca, cb])
+
+        #===============a======================
+        min_a = numpy.min([ab, ac])
+        min_not_a = numpy.min([ba, bc, ca, cb])
+        if min_a == min_not_a and min_a == 0:
+            return None
+        # avg_a = numpy.average([min_a, -min_not_a])
+        avg_a = numpy.average([a_av, -numpy.average([b_av, c_av])])
+        if avg_a > min_a:
+            avg_a = min_a - 1e-7
+        if avg_a < -min_not_a:
+            avg_a = -min_not_a + 1e-7
+
+        # ==============b======================
+        min_b = numpy.min([ba, bc])
+        min_not_b = numpy.min([ab, ac, ca, cb])
+        if min_b == min_not_b and min_b == 0:
+            return None
+
+        # avg_b = numpy.average([min_b, -min_not_b])
+        avg_b = numpy.average([b_av, -numpy.average([a_av, c_av])])
+        if avg_b > min_b:
+            avg_a = min_b - 1e-7
+        if avg_b < -min_not_b:
+            avg_b= -min_not_b + 1e-7
+
+        # ==============c======================
+        min_c = numpy.min([ca, cb])
+        min_not_c = numpy.min([ab, ac, ba, cb])
+        if min_c == min_not_c and min_c == 0:
+            return None
+        # avg_c = numpy.average([min_c, -min_not_c])
+        avg_c = numpy.average([c_av, -numpy.average([a_av, b_av])])
+        if avg_c > min_c:
+            avg_c = min_c - 1e-7
+        if avg_c < -min_not_c:
+            avg_c = -min_not_c + 1e-7
+
+        list_active = []
+        per = self.perceptron
+        list_active.append([per.u_input_r(a, 0), per.u_input_r(a, 1), per.u_input_r(a, 2)])
+        list_active.append([per.u_input_r(b, 0), per.u_input_r(b, 1), per.u_input_r(b, 2)])
+        list_active.append([per.u_input_r(c, 0), per.u_input_r(c, 1), per.u_input_r(c, 2)])
+
+        return list_active, [avg_a, avg_b, avg_c]
+        # res = []
+        # for i in range(len(self.perceptron.a_r_matrix)):
+        #     t0 = self.perceptron.u_input_r(self.all_signals[0], i)
+        #     t1 = self.perceptron.u_input_r(self.all_signals[1], i)
+        #     t2 = self.perceptron.u_input_r(self.all_signals[2], i)
+        #     res.append([t0, t1, t2])
+        # print('эрочки (от слова "эротика"): \n')
+        # print(res)
+        # teta0 = numpy.average(res[0])
+        # teta1 = numpy.average(res[1])
+        # teta2 = numpy.average(res[2])
+        # res = []
+        # for i in range(len(self.perceptron.a_r_matrix)):
+        #     res.append(self.perceptron.u_input_r(self.all_signals[i], i))
+        # return res, [teta0, teta1, teta2]
 
     def __make_letters_list(self):
         res = []
@@ -174,27 +247,25 @@ class Calculating:
             signal_1 = list[i]
             count = numpy.sum(signal_1)
             count /= float(len(signal_1))
-            if count < 0.1:
-                print('Все пропало, Шеф 1\n')
-                exit(-1)
-                return False
+            # if count < 0.1:
+            #     print('Все пропало, Шеф 1\n')
+            #     exit(-1)
+            #     return False
             for j in range(i + 1, len(list)):
                 signal_2 = list[j]
                 div_signal = [1.0 if signal_1[k] != signal_2[k] else 0.0 for k in range(len(signal_1))]
                 count = numpy.sum(div_signal)
-                if count / len(div_signal) < 1.0 / 3.0:
+                if count / len(div_signal) < 0.5:
                     print('Все пропало, Шеф 2\n')
-                    exit(-1)
                     return False
         print('Выпьем\n')
         return True
 
     def __get_threshold_value_for_neurons(self):
         s = '\nПороговые значения для каждого А-элмента: \n'
-
         a11 = []
         for i in range(len(self.a_inputs_signals[0])):
-            a11.append((self.a_inputs_signals[0][i]  + self.a_inputs_signals[1][i] + self.a_inputs_signals[2][i] ) / 3)
+            a11.append((self.a_inputs_signals[0][i] + self.a_inputs_signals[1][i] + self.a_inputs_signals[2][i]) / 3)
 
         # min_arr = []
         # max_arr = []
@@ -216,7 +287,8 @@ class Calculating:
         self.a_treshold_one = a11
         all_signals = []
         for input_signal in self.a_inputs_signals:
-            output_signal = [1 if input_signal[i] >= self.a_treshold_one[i] else 0 for i in range(len(self.a_treshold_one))]
+            output_signal = [1 if input_signal[i] >= self.a_treshold_one[i] else 0 for i in
+                             range(len(self.a_treshold_one))]
             all_signals.append(output_signal)
         return all_signals if self.__get_answer_by_teta_a__(all_signals) else []
 
@@ -310,6 +382,7 @@ class Calculating:
         self.c_s, self.ex_as = self.__calculate_w_as()
         print('\n>> Входной суммарный сигнал С (A-R): ')
         self.c_r, y = self.__calculate_w_rs()
+
         return y
 
     def __calculate_w_as(self):
@@ -336,14 +409,23 @@ class Calculating:
         y1 = 1 if res1 >= teta[1] else -1
         y2 = 1 if res2 >= teta[2] else -1
 
+        best_index = -1
+        max_value = -sys.float_info.max
+        k = [(res0 - teta[0]), (res1 - teta[1]), (res2 - teta[2])]
+        for i in range(len(k)):
+            if max_value < k[i]:
+                best_index = i
+                max_value = k[i]
+
+
+        print('первый раз осознал недостатки, они такие:')
+        print(best_index)
+
         print('осознал свои недостатки, поделюсь с желающими бесценным опытом:')
         print(y0)
         print(y1)
         print(y2)
 
-        # print('teta = ' + str(teta))
-        # print('сигнал = ' + str(res))
-        # print('Изображение похоже на класс: ' + str(y))
         return [], y1
 #
     def __calculate_gemini(self):
@@ -360,178 +442,4 @@ class Calculating:
             if letter_b[i] == letter_a[i]:
                 t += 1
         return t
-#
-#     def gamma_correct(self):
-#         if len(self.flags) == 0:
-#             print('Неудачно попрошла настройка.\n'
-#                   'Нажмите повторно кнопку "Обучить" или введите перед этим новые параметры.')
-#         else:
-#             if not self.flags[0]:
-#                 print('Настройка перцептрона по гамма-системе: ')
-#                 return self.gamma_correction()
-#             else:
-#                 print('Перецептрон теперь умный и готов что-нибудь распознать!')
-#
-#     def threshold_info(self):
-#         self.threshold_all = self.get_threshold_value_for_all()
-#         self.threshold_one = self.get_threshold_value_for_neurons()
-#
-#     def get_threshold_value_for_all(self):
-#         print('\nОбщее пороговое значение: ')
-#         tmp = numpy.ravel(self.a_inputs_signals)
-#         s = 'min = '
-#         mini = numpy.min(tmp)
-#         s += str(mini) + ', max = '
-#         maxi = numpy.max(tmp)
-#         s += str(maxi)
-#         res = round((mini + maxi) / 2, 1)
-#         s += '\nПороговое значение, θ = ' + str(res)
-#         print(s)
-#         return res
-#
-#     def get_threshold_value_for_neurons(self):
-#         print('\nПороговые значения для каждого А-элмента: ')
-#         tmp = numpy.ravel(self.a_inputs_signals)
-#         mini = numpy.min(tmp)
-#         maxi = numpy.max(tmp)
-#
-#         a = self.a_inputs_signals[0]
-#         b = self.a_inputs_signals[1]
-#         res = []
-#         res = [(a[i] + b[i]) / 2 for i in range(len(a))]
-#
-#         # for i in range(len(a)):
-#         #     a1 = a[i]
-#         #     b1 = b[i]
-#         #     mmini = numpy.min([a1, b1])
-#         #     mmaxi = numpy.max([a1, b1])
-#         #     mi2 = numpy.min([mmini, mini])
-#         #     ma2 = numpy.max([mmaxi, maxi])
-#         #     res.append((mi2+ma2)/2)
-#
-#         [print('Пороговое значение для A' + str(i).translate(self.SUB) + ', θ = ' + str(res[i])) for i in
-#          range(len(res))]
-#         return res
-#
-#     def get_a_elements_input_signals(self):
-#         r = [self.perceptron.u_input_all_a(letter[0]) for letter in self.letters_array]
-#         print('Сигналы на входах А-элементов: ')
-#         for l in r:
-#             print(l)
-#         return r
-#
-#     def get_r_elements_input_signals(self):
-#         self.r_input_signals_teta = []
-#         self.r_input_signals_info = []
-#         self.r_input_signals = []
-#         flags = []
-#         for element in self.threshold_array:
-#             print(element[1] + ': ')
-#             res, teta, info = self.check_r(element)
-#             flag = True if info[0] == self.m_array[0][1] and info[1] == self.m_array[1][1] else False
-#             print('настройка перцептрона не требуется\n') if flag else print('требуется настройка перцептрона!!\n')
-#             flags.append(flag)
-#             self.r_input_signals_teta.append(teta)
-#             self.r_input_signals_info.append(info)
-#             self.r_input_signals.append(res)
-#         self.flags = flags
-#
-#     def check_r(self, element):
-#         res = [self.perceptron.u_input_r(el) for el in element[0]]
-#         #self.r_input_signals.append(res)
-#         s = 'Вектор UвхR = ' + str(res)
-#         teta = (res[0] + res[1])/2
-#         s += '. Пороговое значение, Rθ = ' + str(teta) + '.\n'
-#         s += 'Таким образом: ' + str(res[0])
-#         s += ' >= ' + str(teta)
-#         s += ' > ' + str(res[1]) + '. '
-#         info = [1 if res[i] >= teta else -1 for i in range(len(res))]
-#         s += '\nПри подаче исходных сообщений имеем: ' + str(info)
-#         s += '. Изначально имеем: ' + str([self.m_array[0][1], self.m_array[1][1]]) + ' => '
-#         print(s, end='')
-#         return (res, teta, info)
-#
-#     def get_excitatory_neurons(self):
-#         s = '\nВозбуждаемые нейроны, нумерация ведётся с 0: \n'
-#         res = [(self.perceptron.get_excitatory_neurons(letter[0]), letter[1]) for letter in self.letters_array]
-#         for r in res:
-#             s += str(r[1]) + ': '
-#             s += str(r[0]) + '\n'
-#         print(s)
-#         return res
-#
-#     def check_threshold(self):
-#         result = [(self.check_threshold_one(), 'Индивидуальные пороги')
-#                   ,(self.check_threshold_all(), 'Один порог для всех')]
-#         if result[0] is None and result[1] is None:
-#             print('Беда...')
-#         self.threshold_array = [el for el in result if el[0] is not None]
-#
-#     def check_threshold_one(self):
-#         print('\nИндивидуальные пороги для А-элементов: ')
-#         a = self.a_inputs_signals[0]
-#         b = self.a_inputs_signals[1]
-#         res1 = [1 if a[i] >= self.threshold_one[i] else 0 for i in range(len(self.threshold_one))]
-#         res2 = [1 if b[i] >= self.threshold_one[i] else 0 for i in range(len(self.threshold_one))]
-#         print(str(self.letters_array[0][1]) + ': ' + str(res1))
-#         print(str(self.letters_array[1][1]) + ': ' + str(res2))
-#         return [res1, res2] if self.answer_about_teta(res1, res2, 'Индивидуальные пороги для всех нейронов') else None
-#
-#     def check_threshold_all(self):
-#         print('\nОдин порог для всех А-элементов: ')
-#         res1 = [1 if uin >= self.threshold_all else 0 for uin in self.a_inputs_signals[0]]
-#         res2 = [1 if uin >= self.threshold_all else 0 for uin in self.a_inputs_signals[1]]
-#         print(str(self.letters_array[0][1]) + ': ' + str(res1))
-#         print(str(self.letters_array[1][1]) + ': ' + str(res2))
-#         return [res1, res2] if self.answer_about_teta(res1, res2,
-#                                                       'Один порог для всех нейронов') else None
-#
-#     def answer_about_teta(self, res1, res2, info=''):
-#         res = numpy.sum([1 if res1[i] == res2[i] else 0 for i in range(len(res1))])
-#         one_tri = self.input_count / 3
-#         y = True if res == 0 else False
-#         if y:
-#             print('Все нейроны реагируют по-разному')
-#             print('Условие типа \"' + info + '\" удовлетворяет требованиям\n') \
-#                 if y else print('Условие типа \"' + info + '\" _НЕ_ удовлетворяет требованиям\n')
-#             return y
-#
-#         y = True if res < one_tri else False
-#         if y:
-#             print('Не больше одной трети нейронов реагирует по-разному')
-#             print('Условие типа \"' + info + '\" удовлетворяет требованиям\n') \
-#                 if y else print('Условие типа \"' + info + '\" _НЕ_ удовлетворяет требованиям\n')
-#             return y
-#
-#     def make_m_binary(self):
-#         result = []
-#         for i in range(len(self.letters_array)):
-#             letter = copy_and_insert_one(self.letters_array[i][0])
-#             y = -1 if i % 2 != 0 else 1
-#             result.append((letter, y, self.letters_array[i][1]))
-#             print(result[i])
-#         return result
-#
-#     def gamma_correction(self):
-#         r = copy.copy(self.r_input_signals[0])
-#         ta = copy.copy(self.threshold_array[0][0])
-#         to = copy.copy(self.r_input_signals_teta[0])
-#         uvh_array = self.perceptron.gamma_correction(r, 0.1, ta, to)
-#
-#         res = [self.perceptron.u_input_r(el) for el in self.threshold_array[0][0]]
-#         maxi1 = numpy.max(uvh_array)
-#         maxi2 = numpy.max(res)
-#         t1 = numpy.max([maxi1, maxi2])
-#
-#         mini1 = numpy.min(uvh_array)
-#         mini2 = numpy.min(res)
-#         t2 = numpy.min([mini1, mini2])
-#
-#         print('старе')
-#         print(self.r_input_signals_teta)
-#         self.r_input_signals_teta[0] = t1 #numpy.average([t1, t2])
-#         print('еове')
-#         print(self.r_input_signals_teta)
-#         return t1
-#
-#
+

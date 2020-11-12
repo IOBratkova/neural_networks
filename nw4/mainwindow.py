@@ -334,7 +334,7 @@ class Widget:
         self.__label_k_min = Label(self.__w_frame, text='W-range')
         self.__label_k_min.grid(column=0, row=0)
         self.__value_from = DoubleVar()
-        self.__value_from.set(0.0)
+        self.__value_from.set(-0.1)
         self.__value_to = DoubleVar()
         self.__value_to.set(0.1)
         self.__entry_from = Entry(self.__w_frame, textvariable=self.__value_from, width=5)

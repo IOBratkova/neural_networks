@@ -1,3 +1,54 @@
+s = '\nПороговые значения для каждого А-элмента: \n'
+
+        a11 = []
+        for i in range(len(self.a_inputs_signals[0])):
+            a11.append((self.a_inputs_signals[0][i]  + self.a_inputs_signals[1][i] + self.a_inputs_signals[2][i] ) / 3)
+
+        # min_arr = []
+        # max_arr = []
+        # for i in range(len(self.a_inputs_signals[0])):
+        #     min_arr.append(
+        #         numpy.min([self.a_inputs_signals[0][i], self.a_inputs_signals[1][i], self.a_inputs_signals[2][i]]))
+        #     max_arr.append(
+        #         numpy.max([self.a_inputs_signals[0][i], self.a_inputs_signals[1][i], self.a_inputs_signals[2][i]]))
+        #
+        # for i in range(len(min_arr)):
+        #     a11.append(random.uniform(min_arr[i], max_arr[i]))
+
+        print('\n===============================')
+        # print(a11)
+        # print(b11)
+        # print(c11)
+        print('===============================')
+
+        self.a_treshold_one = a11
+        all_signals = []
+        for input_signal in self.a_inputs_signals:
+            output_signal = [1 if input_signal[i] >= self.a_treshold_one[i] else 0 for i in range(len(self.a_treshold_one))]
+            all_signals.append(output_signal)
+        return all_signals if self.__get_answer_by_teta_a__(all_signals) else []
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 def gamma_correction(self, uvh_array, nyt, element):
     s = 'UвхR = ' + str(uvh_array) + '\n'
     current_w = copy.copy(self.a_r_matrix)  # начальные веса
