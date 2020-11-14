@@ -12,14 +12,15 @@ class CalculatingMor:
         self.m_list = None
 
     def teaching(self, count_hide=2):
-        print('\n>> ОБУЧЕНИЕ')
+        print('\n>> ОБУЧЕНИЕ...')
         self.__make_letters_list()
         print('\n>> Создание обучающих выборок')
         self.m_list = self.__make_all_m()
         print('\n>> Создание НС')
         neuron_web = NeuronWebMor(len(self.letter_a1), len(self.letters_list), count_hide)
         print(neuron_web)
-
+        print('\n>> НАЧАЛО ОБУЧЕНИЯ С ПОМОЩЬЮ МОР...')
+        neuron_web.teaching(self.m_list)
 
     def __make_letters_list(self):
         self.letters_list = [
@@ -32,33 +33,32 @@ class CalculatingMor:
             for el in self.letters_list:
                 tmp1 = copy_and_insert_one(el[0])
                 tmp2 = copy_and_insert_one(el[1])
-                result.append((tmp1, tmp2))
+                result.append(tmp1)
+                result.append(tmp2)
             return result
 
         def __make_m(index):
             result = []
             lst = __upd_binary_list()
-            for i in range(len(lst)):
-                if i == index:
-                    tmp1 = lst[i][0], 1
-                    tmp2 = lst[i][1], 1
-                    result.append(tmp1)
-                    result.append(tmp2)
-                    print(tmp1)
-                    print(tmp2)
+            i = 0
+            while i < len(lst):
+                if i == index or i == index + 1:
+                    tmp = lst[i], [1, 0]
+                    print(tmp)
+                    result.append(tmp)
                 else:
-                    tmp1 = lst[i][0], 0
-                    tmp2 = lst[i][1], 0
-                    result.append(tmp1)
-                    result.append(tmp2)
-                    print(tmp1)
-                    print(tmp2)
+                    tmp = lst[i], [0, 1]
+                    print(tmp)
+                    result.append(tmp)
+                i += 1
             return result
 
-        res = []
-        for i in range(len(self.letters_list)):
-            j = i+1
-            print('m-' + str(j))
-            tmp = __make_m(i)
-            res.append(tmp)
+        res = __make_m(0)
+        # for el in self.letters_list:
+        #
+        # for i in range(len(self.letters_list)):
+        #     j = i+1
+        #     print('m-' + str(j))
+        #     tmp = __make_m(i)
+        #     res.append(tmp)
         return res

@@ -12,5 +12,5 @@ def __help_gemini(letter_a, letter_b):
 
 def copy_and_insert_one(lst):
     res = copy.deepcopy(lst)
-    res.insert(0, 1)
+    #res.insert(0, 1)
     return res
