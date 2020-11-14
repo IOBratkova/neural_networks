@@ -25,7 +25,7 @@ class NeuronMor:
             pot += x_lst[i] * ws_lst[i]
         return pot
 
-    def calc_uotput(self, x_lst, ws_lst):
+    def calc_u_otput(self, x_lst, ws_lst):
         potential = self.cal_potential(x_lst, ws_lst)
 
     def activation_function(self, p):

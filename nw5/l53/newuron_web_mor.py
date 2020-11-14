@@ -56,6 +56,9 @@ class NeuronWebMor:
     def teaching(self, patterns):
         self.list_patterns = patterns
 
+    def direct_way(self):
+
+
     def __make_count_neurons_in_hide__(self, count_input_neurons, count_hide_layers):
         res = []
 
