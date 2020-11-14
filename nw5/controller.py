@@ -39,8 +39,7 @@ class Controller:
     def read_letter_rs(self, matrix):
         self.algorithm.letter_rs = [0 if not el else 1 for line in matrix for el in line]
 
-    def teach_neuron(self, value_k):
-        self.algorithm.k = value_k
+    def teach_neuron(self):
         self.algorithm.teaching()
 
     def recognize(self):

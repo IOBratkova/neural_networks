@@ -1,7 +1,7 @@
 import copy
 from tkinter import *
 from window.grid import MyGrid
-from controller import Controller
+from l53.controller_mor import ControllerMor
 
 
 class MainWindow:
@@ -9,7 +9,7 @@ class MainWindow:
         # Окно0
         self.__window = Tk()
         self.__window.wm_minsize(620, 470)
-        self.__controller = Controller()
+        self.__controller = ControllerMor()
 
         # Кнопочки
         self.__button_a1 = None
@@ -48,7 +48,7 @@ class MainWindow:
 
     def __set_settings(self):
         self.__window.title('Нейронные сети, лабораторная работа №2')
-        self.__controller = Controller()
+        self.__controller = ControllerMor()
         #self.__set_functions_menu()
         self.__set_letter_buttons()
         self.__set_other_buttons()
@@ -491,18 +491,18 @@ class MainWindow:
             print('\nWINDOW: Символ B1 не введён')
         elif self.__controller.algorithm.letter_b2 is None:
             print('\nWINDOW: Символ B2 не введён')
-        elif self.__controller.algorithm.letter_c1 is None:
-            print('\nWINDOW: Символ C1 не введён')
-        elif self.__controller.algorithm.letter_c2 is None:
-            print('\nWINDOW: Символ C2 не введён')
-        elif self.__controller.algorithm.letter_d1 is None:
-            print('\nWINDOW: Символ D1 не введён')
-        elif self.__controller.algorithm.letter_d2 is None:
-            print('\nWINDOW: Символ D2 не введён')
-        elif self.__controller.algorithm.letter_e1 is None:
-            print('\nWINDOW: Символ E1 не введён')
-        elif self.__controller.algorithm.letter_e2 is None:
-            print('\nWINDOW: Символ E2 не введён')
+        # elif self.__controller.algorithm.letter_c1 is None:
+        #     print('\nWINDOW: Символ C1 не введён')
+        # elif self.__controller.algorithm.letter_c2 is None:
+        #     print('\nWINDOW: Символ C2 не введён')
+        # elif self.__controller.algorithm.letter_d1 is None:
+        #     print('\nWINDOW: Символ D1 не введён')
+        # elif self.__controller.algorithm.letter_d2 is None:
+        #     print('\nWINDOW: Символ D2 не введён')
+        # elif self.__controller.algorithm.letter_e1 is None:
+        #     print('\nWINDOW: Символ E1 не введён')
+        # elif self.__controller.algorithm.letter_e2 is None:
+        #     print('\nWINDOW: Символ E2 не введён')
         else:
-            print('\n>> Вычисления при k = ', self.__value_k.get())
-            self.__controller.teach_neuron(float(self.__value_k.get()))
+            # print('\n>> Вычисления при k = ', self.__value_k.get())
+            self.__controller.teach_neuron()

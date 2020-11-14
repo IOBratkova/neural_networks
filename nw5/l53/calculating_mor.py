@@ -1,4 +1,5 @@
 from calculate.utils import *
+from l53.newuron_web_mor import NeuronWebMor
 
 
 class CalculatingMor:
@@ -10,11 +11,15 @@ class CalculatingMor:
         self.letter_rs = None
         self.m_list = None
 
-    def teaching(self):
+    def teaching(self, count_hide=2):
         print('\n>> ОБУЧЕНИЕ')
         self.__make_letters_list()
         print('\n>> Создание обучающих выборок')
         self.m_list = self.__make_all_m()
+        print('\n>> Создание НС')
+        neuron_web = NeuronWebMor(len(self.letter_a1), len(self.letters_list), count_hide)
+        print(neuron_web)
+
 
     def __make_letters_list(self):
         self.letters_list = [
