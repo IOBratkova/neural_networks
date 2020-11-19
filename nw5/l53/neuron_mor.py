@@ -8,6 +8,7 @@ class NeuronMor:
         self.w_list = [random.uniform(w_range[0], w_range[1]) for _ in range(count_output)]
         self.potential = None
         self.exi = None
+        self.error = None
 
     def __str__(self):
         s = 'Нейрон'
@@ -35,10 +36,28 @@ class NeuronMor:
             self.exi = exi
             return potential, exi
 
+    def calc_error_signal(self, sign):
+        if type(sign) is int or type(sign) is float:
+            self.error = sign - self.exi
+            return self.error
+        else:
+            error_sing = 0.0
+            for i in range(len(sign)):
+                error_sing += self.w_list[i] * sign[i].error
+            self.error = error_sing
+            return error_sing
+
     def activation_function(self, p):
         return 1.0 / (1.0 + math.exp(-p))
 
     def product_activation_function(self, p):
         return self.activation_function(p) * (1 - self.activation_function(p))
 
-
+    def ws_correction(self, nu, neurons):
+        import copy
+        w = []
+        for i in range(len(neurons)):
+            tmp = nu * neurons[i].error \
+                  * self.product_activation_function(neurons[i].potential) * self.exi
+            w.append(tmp)
+        self.w_list = copy.copy(w)

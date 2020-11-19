@@ -20,7 +20,7 @@ class CalculatingMor:
         neuron_web = NeuronWebMor(len(self.letter_a1), len(self.letters_list), count_hide)
         print(neuron_web)
         print('\n>> НАЧАЛО ОБУЧЕНИЯ С ПОМОЩЬЮ МОР...')
-        neuron_web.teaching(self.m_list)
+        neuron_web.teaching(self.m_list, 0.5, 100)
 
     def __make_letters_list(self):
         self.letters_list = [

@@ -4,16 +4,20 @@ from l53.neuron_mor import NeuronMor
 class NeuronWebMor:
     def __init__(self, count_input_neurons, count_output, count_hide_layers,
                  w_range=(-0.5, 0.5)):  # входных, выходнх, средних слоев
+
         self.count_input_neurons = count_input_neurons
         self.count_output_neurons = count_output
         self.count_hide_layers = count_hide_layers
-        self.count_neurons_in_hide, self.hide_neurons = \
-            self.__make_neurons_in_hide__(count_input_neurons, count_hide_layers, count_output, w_range)
+
+        self.count_neurons_in_hide, self.hide_neurons = self.__make_neurons_in_hide__(count_input_neurons, count_hide_layers, count_output, w_range)
+
+
         self.input_neurons = [
             NeuronMor(1, self.count_neurons_in_hide[0], w_range) for _ in range(count_input_neurons)
         ]
+
         self.output_neurons = [
-            NeuronMor(len(self.hide_neurons[-1]), 1, (0.0, 0.0)) for _ in range(count_output)
+            NeuronMor(len(self.hide_neurons[-1]), 1, w_range) for _ in range(count_output)
         ]
         self.list_patterns = None
 
@@ -54,19 +58,22 @@ class NeuronWebMor:
 
     def __make_neurons_in_hide__(self, count_input, count_hide_layers, count_output, w_range):
         def __calc_count():
-            res = []
-            first = int(count_input / 2)
-            lastt = int(count_input / 4)
-            for i in range(count_hide_layers):  # по количеству слоёв
-                if i == 0:
-                    res.append(first)
-                elif i == count_hide_layers - 1:
-                    res.append(lastt)
-                else:
-                    first2 = res[i - 1] - 2
-                    t = first2 if first2 > lastt else lastt
-                    res.append(t)
-            return res
+            if count_input > 8:
+                res = []
+                first = int(count_input / 2)
+                lastt = int(count_input / 4)
+                for i in range(count_hide_layers):  # по количеству слоёв
+                    if i == 0:
+                        res.append(first)
+                    elif i == count_hide_layers - 1:
+                        res.append(lastt)
+                    else:
+                        first2 = res[i - 1] - 2
+                        t = first2 if first2 > lastt else lastt
+                        res.append(t)
+                return res
+            else:
+                return [2, 2]
 
         def __make_neurons():
             res = []
@@ -89,46 +96,64 @@ class NeuronWebMor:
         count_hide_neurons = __calc_count()
         return count_hide_neurons, __make_neurons()
 
-    def teaching(self, patterns):
-        i = 1
-        for pattern in patterns:
-            #print('ИЗОБРАЖЕНИЕ №' + str(i))
+    def teaching(self, patterns, ny, epoch):
+        self.list_patterns = patterns
 
-            self.direct_way(pattern[0])
+        print(self.output_neurons[0])
 
-            i += 1
+        for i in range(epoch):
+            print('Эпоха №' + str(i+1))
+            for pattern in patterns:
+                self.direct_way(pattern[0])
+                self.reverse_way(pattern[1])
+                self.error_correct(ny)
+        print('end')
+
+        print(self.output_neurons[0])
+        #print(self.__str__())
 
     def direct_way(self, pattern):
-        s = 'ПРЯМОЙ ХОД\n'
-        s += 'Входной слой:\n'
         for i in range(self.count_input_neurons):
             self.input_neurons[i].calc_u_output(pattern[i])
-            s += str(i + 1) + '-' + str(self.input_neurons[i]) + '\n'
-        #print(s)
 
-        s += 'Скрытые слои:\n'
-        s += 'Скрытый слой №1: \n'
         potentials = [neuron.potential for neuron in self.input_neurons]
+
         for i in range(len(self.hide_neurons[0])):
             ws_lst = [n.w_list[i] for n in self.input_neurons]
             self.hide_neurons[0][i].calc_u_output(potentials, ws_lst)
-            s += str(i + 1) + '-' + str(self.hide_neurons[0][i]) + '\n'
-        #print(s)
 
-        s = ''
         potentials = [neuron.potential for neuron in self.hide_neurons[0]]
         for i in range(1, self.count_hide_layers):
-            s += 'Скрытый слой №' + str(i + 1) + ': \n'
-            ws_lst = [n.w_list[i] for n in self.hide_neurons[i-1]]
+            ws_lst = [n.w_list[n] for n in self.hide_neurons[i-1]]
             for j in range(len(self.hide_neurons[i])):
                 self.hide_neurons[i][j].calc_u_output(potentials, ws_lst)
-                s += str(j + 1) + '-' + str(self.hide_neurons[i][j]) + '\n'
-        #print(s)
 
-        s += 'Выходной слой: \n'
         potentials = [neuron.potential for neuron in self.hide_neurons[-1]]
         for i in range(self.count_output_neurons):
-            ws_lst = [n.w_list[i] for n in self.hide_neurons[-1]]
+            ws_lst = [n.w_list[n] for n in self.hide_neurons[-1]]
             self.output_neurons[i].calc_u_output(potentials, ws_lst)
-            s += str(i + 1) + '-' + str(self.output_neurons[i]) + '\n'
-        print(s)
+
+    def reverse_way(self, pattern):
+        for i in range(self.count_output_neurons):
+            self.output_neurons[i].calc_error_signal(pattern[i])
+
+        for i in range(len(self.hide_neurons[-1])):
+            self.hide_neurons[-1][i].calc_error_signal(self.output_neurons)
+
+        for i in range(0, self.count_hide_layers - 1):
+            for j in range(len(self.hide_neurons[i])):
+                self.hide_neurons[i][j].calc_error_signal(self.hide_neurons[i + 1])
+
+    def error_correct(self, ny=0.5):
+        for i in range(self.count_input_neurons):
+            self.input_neurons[i].ws_correction(ny, self.hide_neurons[0])
+
+        for i in range(0, self.count_hide_layers - 1):
+            for j in range(len(self.hide_neurons[i])):
+                self.hide_neurons[i][j].ws_correction(ny, self.hide_neurons[i+1])
+
+        for i in range(len(self.hide_neurons[-1])):
+            self.hide_neurons[-1][i].ws_correction(ny, self.output_neurons)
+
+        # for i in range(self.count_output_neurons):
+        #     self.output_neurons[i].ws_correction(ny, self.output_neurons)
