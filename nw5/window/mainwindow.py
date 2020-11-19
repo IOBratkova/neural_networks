@@ -68,14 +68,14 @@ class MainWindow:
         self.__const_b1 = [[1, 1, 1, 1, 1], [1, 0, 0, 0, 1], [1, 0, 0, 0, 1], [1, 0, 0, 0, 1], [1, 1, 1, 1, 1]]
         self.__const_b2 = [[0, 1, 1, 1, 0], [1, 0, 0, 0, 1], [1, 0, 0, 0, 1], [1, 0, 0, 0, 1], [0, 1, 1, 1, 0]]
         # а
-        # self.__const_c1 = [[0, 0, 1, 0, 0], [0, 1, 0, 1, 0], [1, 0, 0, 0, 1], [1, 1, 1, 1, 1], [1, 0, 0, 0, 1]]
-        # self.__const_c2 = [[0, 1, 1, 1, 0], [1, 0, 0, 0, 1], [1, 0, 0, 0, 1], [1, 1, 1, 1, 1], [1, 0, 0, 0, 1]]
-        # # т
-        # self.__const_d1 = [[1, 1, 1, 1, 1], [0, 0, 1, 0, 0], [0, 0, 1, 0, 0], [0, 0, 1, 0, 0], [0, 0, 1, 0, 0]]
-        # self.__const_d2 = [[1, 1, 1, 1, 1], [1, 0, 1, 0, 1], [1, 0, 1, 0, 1], [0, 0, 1, 0, 0], [0, 0, 1, 0, 0]]
-        # # к
-        # self.__const_e1 = [[1, 0, 0, 1, 1], [1, 0, 1, 0, 0], [1, 1, 0, 0, 0], [1, 1, 1, 0, 0], [1, 0, 0, 1, 1]]
-        # self.__const_e2 = [[1, 0, 0, 1, 1], [1, 0, 1, 0, 1], [1, 1, 0, 0, 0], [1, 0, 1, 0, 0], [1, 0, 0, 1, 1]]
+        self.__const_c1 = [[0, 0, 1, 0, 0], [0, 1, 0, 1, 0], [1, 0, 0, 0, 1], [1, 1, 1, 1, 1], [1, 0, 0, 0, 1]]
+        self.__const_c2 = [[0, 1, 1, 1, 0], [1, 0, 0, 0, 1], [1, 0, 0, 0, 1], [1, 1, 1, 1, 1], [1, 0, 0, 0, 1]]
+        # т
+        self.__const_d1 = [[1, 1, 1, 1, 1], [0, 0, 1, 0, 0], [0, 0, 1, 0, 0], [0, 0, 1, 0, 0], [0, 0, 1, 0, 0]]
+        self.__const_d2 = [[1, 1, 1, 1, 1], [1, 0, 1, 0, 1], [1, 0, 1, 0, 1], [0, 0, 1, 0, 0], [0, 0, 1, 0, 0]]
+        # к
+        self.__const_e1 = [[1, 0, 0, 1, 1], [1, 0, 1, 0, 0], [1, 1, 0, 0, 0], [1, 1, 1, 0, 0], [1, 0, 0, 1, 1]]
+        self.__const_e2 = [[1, 0, 0, 1, 1], [1, 0, 1, 0, 1], [1, 1, 0, 0, 0], [1, 0, 1, 0, 0], [1, 0, 0, 1, 1]]
 
         self.__const_rs = [[1, 0, 0, 1, 1], [1, 0, 1, 0, 0], [1, 1, 0, 0, 0], [1, 1, 1, 0, 0], [1, 0, 0, 1, 1]]
 
@@ -122,65 +122,65 @@ class MainWindow:
                                               state=DISABLED)
         self.__check_memento_b2.grid(column=2, row=3)
 
-        # self.__button_c1 = Button(self.__button_frame, text='C1', width=5, command=self.__set_const_c1)
-        # self.__button_c1.grid(column=0, row=4)
-        # self.__button_memento_c1 = Button(self.__button_frame, text='Запомнить C1',
-        #                                   width=15, command=self.__read_letter_c1)
-        # self.__button_memento_c1.grid(column=1, row=4)
-        # self.__var_check_c1 = IntVar(0)
-        # self.__check_memento_c1 = Checkbutton(self.__button_frame, variable=self.__var_check_c1, onvalue=1, offvalue=0,
-        #                                       state=DISABLED)
-        # self.__check_memento_c1.grid(column=2, row=4)
-        #
-        # self.__button_c2 = Button(self.__button_frame, text='C2', width=5, command=self.__set_const_c2)
-        # self.__button_c2.grid(column=0, row=5)
-        # self.__button_memento_c2 = Button(self.__button_frame, text='Запомнить C2',
-        #                                   width=15, command=self.__read_letter_c2)
-        # self.__button_memento_c2.grid(column=1, row=5)
-        # self.__var_check_c2 = IntVar(0)
-        # self.__check_memento_c2 = Checkbutton(self.__button_frame, variable=self.__var_check_c2, onvalue=1, offvalue=0,
-        #                                       state=DISABLED)
-        # self.__check_memento_c2.grid(column=2, row=5)
-        #
-        # self.__button_d1 = Button(self.__button_frame, text='D1', width=5, command=self.__set_const_d1)
-        # self.__button_d1.grid(column=0, row=6)
-        # self.__button_memento_d1 = Button(self.__button_frame, text='Запомнить D1',
-        #                                   width=15, command=self.__read_letter_d1)
-        # self.__button_memento_d1.grid(column=1, row=6)
-        # self.__var_check_d1 = IntVar(0)
-        # self.__check_memento_d1 = Checkbutton(self.__button_frame, variable=self.__var_check_d1, onvalue=1, offvalue=0,
-        #                                       state=DISABLED)
-        # self.__check_memento_d1.grid(column=2, row=6)
-        #
-        # self.__button_d2 = Button(self.__button_frame, text='D2', width=5, command=self.__set_const_d2)
-        # self.__button_d2.grid(column=0, row=7)
-        # self.__button_memento_d2 = Button(self.__button_frame, text='Запомнить D2',
-        #                                   width=15, command=self.__read_letter_d2)
-        # self.__button_memento_d2.grid(column=1, row=7)
-        # self.__var_check_d2 = IntVar(0)
-        # self.__check_memento_d2 = Checkbutton(self.__button_frame, variable=self.__var_check_d2, onvalue=1, offvalue=0,
-        #                                       state=DISABLED)
-        # self.__check_memento_d2.grid(column=2, row=7)
-        #
-        # self.__button_e1 = Button(self.__button_frame, text='E1', width=5, command=self.__set_const_e1)
-        # self.__button_e1.grid(column=0, row=8)
-        # self.__button_memento_e1 = Button(self.__button_frame, text='Запомнить E1',
-        #                                   width=15, command=self.__read_letter_e1)
-        # self.__button_memento_e1.grid(column=1, row=8)
-        # self.__var_check_e1 = IntVar(0)
-        # self.__check_memento_e1 = Checkbutton(self.__button_frame, variable=self.__var_check_e1, onvalue=1, offvalue=0,
-        #                                       state=DISABLED)
-        # self.__check_memento_e1.grid(column=2, row=8)
-        #
-        # self.__button_e2 = Button(self.__button_frame, text='E2', width=5, command=self.__set_const_e2)
-        # self.__button_e2.grid(column=0, row=9)
-        # self.__button_memento_e2 = Button(self.__button_frame, text='Запомнить E2',
-        #                                   width=15, command=self.__read_letter_e2)
-        # self.__button_memento_e2.grid(column=1, row=9)
-        # self.__var_check_e2 = IntVar(0)
-        # self.__check_memento_e2 = Checkbutton(self.__button_frame, variable=self.__var_check_e2, onvalue=1, offvalue=0,
-        #                                       state=DISABLED)
-        # self.__check_memento_e2.grid(column=2, row=9)
+        self.__button_c1 = Button(self.__button_frame, text='C1', width=5, command=self.__set_const_c1)
+        self.__button_c1.grid(column=0, row=4)
+        self.__button_memento_c1 = Button(self.__button_frame, text='Запомнить C1',
+                                          width=15, command=self.__read_letter_c1)
+        self.__button_memento_c1.grid(column=1, row=4)
+        self.__var_check_c1 = IntVar(0)
+        self.__check_memento_c1 = Checkbutton(self.__button_frame, variable=self.__var_check_c1, onvalue=1, offvalue=0,
+                                              state=DISABLED)
+        self.__check_memento_c1.grid(column=2, row=4)
+
+        self.__button_c2 = Button(self.__button_frame, text='C2', width=5, command=self.__set_const_c2)
+        self.__button_c2.grid(column=0, row=5)
+        self.__button_memento_c2 = Button(self.__button_frame, text='Запомнить C2',
+                                          width=15, command=self.__read_letter_c2)
+        self.__button_memento_c2.grid(column=1, row=5)
+        self.__var_check_c2 = IntVar(0)
+        self.__check_memento_c2 = Checkbutton(self.__button_frame, variable=self.__var_check_c2, onvalue=1, offvalue=0,
+                                              state=DISABLED)
+        self.__check_memento_c2.grid(column=2, row=5)
+
+        self.__button_d1 = Button(self.__button_frame, text='D1', width=5, command=self.__set_const_d1)
+        self.__button_d1.grid(column=0, row=6)
+        self.__button_memento_d1 = Button(self.__button_frame, text='Запомнить D1',
+                                          width=15, command=self.__read_letter_d1)
+        self.__button_memento_d1.grid(column=1, row=6)
+        self.__var_check_d1 = IntVar(0)
+        self.__check_memento_d1 = Checkbutton(self.__button_frame, variable=self.__var_check_d1, onvalue=1, offvalue=0,
+                                              state=DISABLED)
+        self.__check_memento_d1.grid(column=2, row=6)
+
+        self.__button_d2 = Button(self.__button_frame, text='D2', width=5, command=self.__set_const_d2)
+        self.__button_d2.grid(column=0, row=7)
+        self.__button_memento_d2 = Button(self.__button_frame, text='Запомнить D2',
+                                          width=15, command=self.__read_letter_d2)
+        self.__button_memento_d2.grid(column=1, row=7)
+        self.__var_check_d2 = IntVar(0)
+        self.__check_memento_d2 = Checkbutton(self.__button_frame, variable=self.__var_check_d2, onvalue=1, offvalue=0,
+                                              state=DISABLED)
+        self.__check_memento_d2.grid(column=2, row=7)
+
+        self.__button_e1 = Button(self.__button_frame, text='E1', width=5, command=self.__set_const_e1)
+        self.__button_e1.grid(column=0, row=8)
+        self.__button_memento_e1 = Button(self.__button_frame, text='Запомнить E1',
+                                          width=15, command=self.__read_letter_e1)
+        self.__button_memento_e1.grid(column=1, row=8)
+        self.__var_check_e1 = IntVar(0)
+        self.__check_memento_e1 = Checkbutton(self.__button_frame, variable=self.__var_check_e1, onvalue=1, offvalue=0,
+                                              state=DISABLED)
+        self.__check_memento_e1.grid(column=2, row=8)
+
+        self.__button_e2 = Button(self.__button_frame, text='E2', width=5, command=self.__set_const_e2)
+        self.__button_e2.grid(column=0, row=9)
+        self.__button_memento_e2 = Button(self.__button_frame, text='Запомнить E2',
+                                          width=15, command=self.__read_letter_e2)
+        self.__button_memento_e2.grid(column=1, row=9)
+        self.__var_check_e2 = IntVar(0)
+        self.__check_memento_e2 = Checkbutton(self.__button_frame, variable=self.__var_check_e2, onvalue=1, offvalue=0,
+                                              state=DISABLED)
+        self.__check_memento_e2.grid(column=2, row=9)
 
         self.__button_rs = Button(self.__button_frame, text='RS', width=5, command=self.__set_const_rs)
         self.__button_rs.grid(column=0, row=11)
@@ -262,77 +262,77 @@ class MainWindow:
         self.__clear()
         self.__set_const_letter(self.__const_b2)
 
-    # def __read_letter_c1(self):
-    #     print('\nWINDOW: символ C1 считан')
-    #     self.__controller.read_letter_c1(self.__my_grid.titles)
-    #     self.__var_check_c1.set(1)
-    #     self.__const_c1 = copy.deepcopy(self.__my_grid.titles)
-    #     print(self.__controller.algorithm.letter_c1)
-    #
-    # def __set_const_c1(self):
-    #     print('\nWINDOW: буква C1')
-    #     self.__clear()
-    #     self.__set_const_letter(self.__const_c1)
-    #
-    # def __read_letter_c2(self):
-    #     print('\nWINDOW: символ C2 считан')
-    #     self.__controller.read_letter_c2(self.__my_grid.titles)
-    #     self.__var_check_c2.set(1)
-    #     self.__const_c2 = copy.deepcopy(self.__my_grid.titles)
-    #     print(self.__controller.algorithm.letter_c2)
-    #
-    # def __set_const_c2(self):
-    #     print('\nWINDOW: буква c2')
-    #     self.__clear()
-    #     self.__set_const_letter(self.__const_c2)
-    #
-    # def __read_letter_d1(self):
-    #     print('\nWINDOW: символ D1 считан')
-    #     self.__controller.read_letter_d1(self.__my_grid.titles)
-    #     self.__var_check_d1.set(1)
-    #     self.__const_d1 = copy.deepcopy(self.__my_grid.titles)
-    #     print(self.__controller.algorithm.letter_d1)
-    #
-    # def __set_const_d1(self):
-    #     print('\nWINDOW: буква D1')
-    #     self.__clear()
-    #     self.__set_const_letter(self.__const_d1)
-    #
-    # def __read_letter_d2(self):
-    #     print('\nWINDOW: символ D2 считан')
-    #     self.__controller.read_letter_d2(self.__my_grid.titles)
-    #     self.__var_check_d2.set(1)
-    #     self.__const_d2 = copy.deepcopy(self.__my_grid.titles)
-    #     print(self.__controller.algorithm.letter_d2)
-    #
-    # def __set_const_d2(self):
-    #     print('\nWINDOW: буква D2')
-    #     self.__clear()
-    #     self.__set_const_letter(self.__const_d2)
-    #
-    # def __read_letter_e1(self):
-    #     print('\nWINDOW: символ E1 считан')
-    #     self.__controller.read_letter_e1(self.__my_grid.titles)
-    #     self.__var_check_e1.set(1)
-    #     self.__const_e1 = copy.deepcopy(self.__my_grid.titles)
-    #     print(self.__controller.algorithm.letter_e1)
-    #
-    # def __set_const_e1(self):
-    #     print('\nWINDOW: буква E1')
-    #     self.__clear()
-    #     self.__set_const_letter(self.__const_e1)
-    #
-    # def __read_letter_e2(self):
-    #     print('\nWINDOW: символ E2 считан')
-    #     self.__controller.read_letter_e2(self.__my_grid.titles)
-    #     self.__var_check_e2.set(1)
-    #     self.__const_e2 = copy.deepcopy(self.__my_grid.titles)
-    #     print(self.__controller.algorithm.letter_e2)
-    #
-    # def __set_const_e2(self):
-    #     print('\nWINDOW: буква E2')
-    #     self.__clear()
-    #     self.__set_const_letter(self.__const_e2)
+    def __read_letter_c1(self):
+        print('\nWINDOW: символ C1 считан')
+        self.__controller.read_letter_c1(self.__my_grid.titles)
+        self.__var_check_c1.set(1)
+        self.__const_c1 = copy.deepcopy(self.__my_grid.titles)
+        print(self.__controller.algorithm.letter_c1)
+
+    def __set_const_c1(self):
+        print('\nWINDOW: буква C1')
+        self.__clear()
+        self.__set_const_letter(self.__const_c1)
+
+    def __read_letter_c2(self):
+        print('\nWINDOW: символ C2 считан')
+        self.__controller.read_letter_c2(self.__my_grid.titles)
+        self.__var_check_c2.set(1)
+        self.__const_c2 = copy.deepcopy(self.__my_grid.titles)
+        print(self.__controller.algorithm.letter_c2)
+
+    def __set_const_c2(self):
+        print('\nWINDOW: буква c2')
+        self.__clear()
+        self.__set_const_letter(self.__const_c2)
+
+    def __read_letter_d1(self):
+        print('\nWINDOW: символ D1 считан')
+        self.__controller.read_letter_d1(self.__my_grid.titles)
+        self.__var_check_d1.set(1)
+        self.__const_d1 = copy.deepcopy(self.__my_grid.titles)
+        print(self.__controller.algorithm.letter_d1)
+
+    def __set_const_d1(self):
+        print('\nWINDOW: буква D1')
+        self.__clear()
+        self.__set_const_letter(self.__const_d1)
+
+    def __read_letter_d2(self):
+        print('\nWINDOW: символ D2 считан')
+        self.__controller.read_letter_d2(self.__my_grid.titles)
+        self.__var_check_d2.set(1)
+        self.__const_d2 = copy.deepcopy(self.__my_grid.titles)
+        print(self.__controller.algorithm.letter_d2)
+
+    def __set_const_d2(self):
+        print('\nWINDOW: буква D2')
+        self.__clear()
+        self.__set_const_letter(self.__const_d2)
+
+    def __read_letter_e1(self):
+        print('\nWINDOW: символ E1 считан')
+        self.__controller.read_letter_e1(self.__my_grid.titles)
+        self.__var_check_e1.set(1)
+        self.__const_e1 = copy.deepcopy(self.__my_grid.titles)
+        print(self.__controller.algorithm.letter_e1)
+
+    def __set_const_e1(self):
+        print('\nWINDOW: буква E1')
+        self.__clear()
+        self.__set_const_letter(self.__const_e1)
+
+    def __read_letter_e2(self):
+        print('\nWINDOW: символ E2 считан')
+        self.__controller.read_letter_e2(self.__my_grid.titles)
+        self.__var_check_e2.set(1)
+        self.__const_e2 = copy.deepcopy(self.__my_grid.titles)
+        print(self.__controller.algorithm.letter_e2)
+
+    def __set_const_e2(self):
+        print('\nWINDOW: буква E2')
+        self.__clear()
+        self.__set_const_letter(self.__const_e2)
 
     def __read_letter_rs(self):
         print('\nWINDOW: символ RS считан')
@@ -379,15 +379,15 @@ class MainWindow:
 
         self.__a1_radiobutton = BooleanVar()
         self.__b1_radiobutton = BooleanVar()
-        # self.__c1_radiobutton = BooleanVar()
-        # self.__d1_radiobutton = BooleanVar()
-        # self.__e1_radiobutton = BooleanVar()
+        self.__c1_radiobutton = BooleanVar()
+        self.__d1_radiobutton = BooleanVar()
+        self.__e1_radiobutton = BooleanVar()
         self.__un_radiobutton = BooleanVar()
         self.__a1_radiobutton.set(0)
         self.__b1_radiobutton.set(0)
-        # self.__c1_radiobutton.set(0)
-        # self.__d1_radiobutton.set(0)
-        # self.__e1_radiobutton.set(0)
+        self.__c1_radiobutton.set(0)
+        self.__d1_radiobutton.set(0)
+        self.__e1_radiobutton.set(0)
         self.__un_radiobutton.set(0)
 
         self.__result_label = Label(self.__answer_box_frame, text='Результат: ')
@@ -402,17 +402,17 @@ class MainWindow:
                                            variable=self.__b1_radiobutton, value=1, state=DISABLED)
         self.__radiobutton_b.grid(column=3, row=1)
 
-        # self.__radiobutton_c = Radiobutton(self.__answer_box_frame, text='C1/C2',
-        #                                    variable=self.__c1_radiobutton, value=1, state=DISABLED)
-        # self.__radiobutton_c.grid(column=4, row=1)
-        #
-        # self.__radiobutton_d = Radiobutton(self.__answer_box_frame, text='D1/D2',
-        #                                    variable=self.__d1_radiobutton, value=1, state=DISABLED)
-        # self.__radiobutton_d.grid(column=5, row=1)
-        #
-        # self.__radiobutton_e = Radiobutton(self.__answer_box_frame, text='E1/E2',
-        #                                    variable=self.__e1_radiobutton, value=1, state=DISABLED)
-        # self.__radiobutton_e.grid(column=6, row=1)
+        self.__radiobutton_c = Radiobutton(self.__answer_box_frame, text='C1/C2',
+                                           variable=self.__c1_radiobutton, value=1, state=DISABLED)
+        self.__radiobutton_c.grid(column=4, row=1)
+
+        self.__radiobutton_d = Radiobutton(self.__answer_box_frame, text='D1/D2',
+                                           variable=self.__d1_radiobutton, value=1, state=DISABLED)
+        self.__radiobutton_d.grid(column=5, row=1)
+
+        self.__radiobutton_e = Radiobutton(self.__answer_box_frame, text='E1/E2',
+                                           variable=self.__e1_radiobutton, value=1, state=DISABLED)
+        self.__radiobutton_e.grid(column=6, row=1)
 
         self.__radiobutton_un = Radiobutton(self.__answer_box_frame, text='Неизвестно',
                                             variable=self.__un_radiobutton, value=1, state=DISABLED)
@@ -435,51 +435,51 @@ class MainWindow:
     def __set_result(self, result):
         self.__a1_radiobutton.set(0)
         self.__b1_radiobutton.set(0)
-        # self.__c1_radiobutton.set(0)
-        # self.__d1_radiobutton.set(0)
-        # self.__e1_radiobutton.set(0)
+        self.__c1_radiobutton.set(0)
+        self.__d1_radiobutton.set(0)
+        self.__e1_radiobutton.set(0)
         self.__un_radiobutton.set(0)
         if result[0] == 1:
             self.__a1_radiobutton.set(1)
             self.__b1_radiobutton.set(0)
-            # self.__c1_radiobutton.set(0)
-            # self.__d1_radiobutton.set(0)
-            # self.__e1_radiobutton.set(0)
+            self.__c1_radiobutton.set(0)
+            self.__d1_radiobutton.set(0)
+            self.__e1_radiobutton.set(0)
             self.__un_radiobutton.set(0)
         elif result[1] == 1:
             self.__a1_radiobutton.set(0)
             self.__b1_radiobutton.set(1)
-            # self.__c1_radiobutton.set(0)
-            # self.__d1_radiobutton.set(0)
-            # self.__e1_radiobutton.set(0)
+            self.__c1_radiobutton.set(0)
+            self.__d1_radiobutton.set(0)
+            self.__e1_radiobutton.set(0)
             self.__un_radiobutton.set(0)
         elif result[2] == 1:
             self.__a1_radiobutton.set(0)
             self.__b1_radiobutton.set(0)
-            # self.__c1_radiobutton.set(1)
-            # self.__d1_radiobutton.set(0)
-            # self.__e1_radiobutton.set(0)
+            self.__c1_radiobutton.set(1)
+            self.__d1_radiobutton.set(0)
+            self.__e1_radiobutton.set(0)
             self.__un_radiobutton.set(0)
         elif result[3] == 1:
             self.__a1_radiobutton.set(0)
             self.__b1_radiobutton.set(0)
-            # self.__c1_radiobutton.set(0)
-            # self.__d1_radiobutton.set(1)
-            # self.__e1_radiobutton.set(0)
+            self.__c1_radiobutton.set(0)
+            self.__d1_radiobutton.set(1)
+            self.__e1_radiobutton.set(0)
             self.__un_radiobutton.set(0)
         elif result[4] == 1:
             self.__a1_radiobutton.set(0)
             self.__b1_radiobutton.set(0)
-            # self.__c1_radiobutton.set(0)
-            # self.__d1_radiobutton.set(0)
-            # self.__e1_radiobutton.set(1)
+            self.__c1_radiobutton.set(0)
+            self.__d1_radiobutton.set(0)
+            self.__e1_radiobutton.set(1)
             self.__un_radiobutton.set(0)
         else:
             self.__a1_radiobutton.set(0)
             self.__b1_radiobutton.set(0)
-            # self.__c1_radiobutton.set(0)
-            # self.__d1_radiobutton.set(0)
-            # self.__e1_radiobutton.set(0)
+            self.__c1_radiobutton.set(0)
+            self.__d1_radiobutton.set(0)
+            self.__e1_radiobutton.set(0)
             self.__un_radiobutton.set(1)
 
     def __teach_neuron(self):

@@ -15,6 +15,7 @@ class NeuronMor:
         s += ' (\n\t\tвходов = ' + str(self.count_input) + ', '
         s += 'выходов = ' + str(self.count_output) + ', '
         s += '\n\t\tвеса на выходе = ' + str(self.w_list) + ', '
+        s += '\n\t\tвыходное значение = ' + str(self.exi) +', '
         s += '\n\t\tпотенциалы = ' + str(self.potential) + '\n)'
         return s
 
@@ -43,7 +44,10 @@ class NeuronMor:
         else:
             error_sing = 0.0
             for i in range(len(sign)):
-                error_sing += self.w_list[i] * sign[i].error
+                error = sign[i].error
+                error *= sign[i].exi
+                error *= (1.0 - sign[i].exi)
+                error_sing += self.w_list[i] * error
             self.error = error_sing
             return error_sing
 
@@ -54,10 +58,6 @@ class NeuronMor:
         return self.activation_function(p) * (1 - self.activation_function(p))
 
     def ws_correction(self, nu, neurons):
-        import copy
-        w = []
         for i in range(len(neurons)):
-            tmp = nu * neurons[i].error \
-                  * self.product_activation_function(neurons[i].potential) * self.exi
-            w.append(tmp)
-        self.w_list = copy.copy(w)
+            tmp = nu * neurons[i].error * self.product_activation_function(neurons[i].potential) * self.exi
+            self.w_list[i] += tmp

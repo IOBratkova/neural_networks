@@ -1,4 +1,6 @@
 from l53.neuron_mor import NeuronMor
+import copy
+import math
 
 
 class NeuronWebMor:
@@ -96,41 +98,87 @@ class NeuronWebMor:
         count_hide_neurons = __calc_count()
         return count_hide_neurons, __make_neurons()
 
-    def teaching(self, patterns, ny, epoch):
+    def teaching(self, patterns, ny):
         self.list_patterns = patterns
+        indexes = [i for i in range(len(patterns))]
+        count_epoch = 0
+        flag = False
+        while not flag:
+            exis = []
+            for i in range(len(patterns)):
+                if i in indexes:
+                    self.direct_way(patterns[i][0])
+                    self.reverse_way(patterns[i][1])
+                    self.error_correct(ny)
+                    # exi = copy.copy([e.exi for e in self.output_neurons])
+                    exi = patterns[i][1]
+                    exis.append(exi)
 
-        print(self.output_neurons[0])
+            flag, indexes = self.__ost(patterns, exis, indexes)
+            count_epoch += 1
+        print('\nПотребовалось эпох: '+str(count_epoch))
+        for o in self.output_neurons:
+            print(o)
 
-        for i in range(epoch):
-            print('Эпоха №' + str(i+1))
-            for pattern in patterns:
-                self.direct_way(pattern[0])
-                self.reverse_way(pattern[1])
-                self.error_correct(ny)
-        print('end')
+    def recognize(self, letter):
+        self.direct_way(letter)
+        exi = [e.exi for e in self.output_neurons]
+        print('Выходы: ')
+        print(exi)
 
-        print(self.output_neurons[0])
-        #print(self.__str__())
+    def __ost(self, patterns, exis1, last_idexes, eps=0.1):
+        exis2 = []
+        for i in range(len(patterns)):
+            if i in last_idexes:
+                self.direct_way(patterns[i][0])
+                exi2 = copy.copy([e.exi for e in self.output_neurons])
+                exis2.append(exi2)
+
+        indexes = []
+        for i in range(len(exis2)):
+            e1 = exis1[i]
+            e2 = exis2[i]
+            for j in range(len(e2)):
+                if math.fabs(e1[j] - e2[j]) < eps:
+                    continue
+                else:
+                    if i not in indexes:
+                        indexes.append(i)
+        return (False, indexes) if len(indexes) != 0 else (True, [])
+
+
+        # for i in range(len(exi2)):
+
+
+        # for i in range(epoch):
+        #     #print('Эпоха №' + str(i+1))
+        #     for pattern in patterns:
+        #         self.direct_way(pattern[0])
+        #         self.reverse_way(pattern[1])
+        #         self.error_correct(ny)
+        # print('end')
+        #
+        # print(self.output_neurons[0])
+        # #ripnt(self.__str__())
 
     def direct_way(self, pattern):
         for i in range(self.count_input_neurons):
             self.input_neurons[i].calc_u_output(pattern[i])
 
-        potentials = [neuron.potential for neuron in self.input_neurons]
-
+        potentials = [neuron.exi for neuron in self.input_neurons]
         for i in range(len(self.hide_neurons[0])):
             ws_lst = [n.w_list[i] for n in self.input_neurons]
             self.hide_neurons[0][i].calc_u_output(potentials, ws_lst)
 
-        potentials = [neuron.potential for neuron in self.hide_neurons[0]]
+        potentials = [neuron.exi for neuron in self.hide_neurons[0]]
         for i in range(1, self.count_hide_layers):
-            ws_lst = [n.w_list[n] for n in self.hide_neurons[i-1]]
             for j in range(len(self.hide_neurons[i])):
+                ws_lst = [n.w_list[j] for n in self.hide_neurons[i - 1]]
                 self.hide_neurons[i][j].calc_u_output(potentials, ws_lst)
 
-        potentials = [neuron.potential for neuron in self.hide_neurons[-1]]
+        potentials = [neuron.exi for neuron in self.hide_neurons[-1]]
         for i in range(self.count_output_neurons):
-            ws_lst = [n.w_list[n] for n in self.hide_neurons[-1]]
+            ws_lst = [n.w_list[i] for n in self.hide_neurons[-1]]
             self.output_neurons[i].calc_u_output(potentials, ws_lst)
 
     def reverse_way(self, pattern):
