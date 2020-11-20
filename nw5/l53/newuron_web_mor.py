@@ -4,20 +4,14 @@ import math
 
 
 class NeuronWebMor:
-    def __init__(self, count_input_neurons, count_output, count_hide_layers,
-                 w_range=(-0.5, 0.5)):  # входных, выходнх, средних слоев
-
+    def __init__(self, count_input_neurons, count_output, count_hide_layers, w_range=(-0.5, 0.5)):
         self.count_input_neurons = count_input_neurons
         self.count_output_neurons = count_output
         self.count_hide_layers = count_hide_layers
-
         self.count_neurons_in_hide, self.hide_neurons = self.__make_neurons_in_hide__(count_input_neurons, count_hide_layers, count_output, w_range)
-
-
         self.input_neurons = [
             NeuronMor(1, self.count_neurons_in_hide[0], w_range) for _ in range(count_input_neurons)
         ]
-
         self.output_neurons = [
             NeuronMor(len(self.hide_neurons[-1]), 1, w_range) for _ in range(count_output)
         ]
@@ -43,16 +37,12 @@ class NeuronWebMor:
                 else:
                     s += '\n\tСлой №' + str(k) + '\n' + __lst_neurons_to_string(matrix[m], '\t\t') + '\n'
             return s
-
         s = 'Сеть.\nВходной слой = {\n'
-
         t = __lst_neurons_to_string(self.input_neurons)
         s += str(t) + '\n}\n'
-
         s += '\nСкрытые слои = {\n'
         t = __matrix_neurons_to_string(self.hide_neurons)
         s += str(t) + '\n}\n'
-
         s += '\nВыходной слой = {\n'
         t = __lst_neurons_to_string(self.output_neurons)
         s += str(t) + '\n}\n'
@@ -98,7 +88,7 @@ class NeuronWebMor:
         count_hide_neurons = __calc_count()
         return count_hide_neurons, __make_neurons()
 
-    def teaching(self, patterns, ny):
+    def teaching(self, patterns, ny, eps):
         self.list_patterns = patterns
         indexes = [i for i in range(len(patterns))]
         count_epoch = 0
@@ -110,11 +100,9 @@ class NeuronWebMor:
                     self.direct_way(patterns[i][0])
                     self.reverse_way(patterns[i][1])
                     self.error_correct(ny)
-                    # exi = copy.copy([e.exi for e in self.output_neurons])
                     exi = patterns[i][1]
                     exis.append(exi)
-
-            flag, indexes = self.__ost(patterns, exis, indexes)
+            flag, indexes = self.__ost(patterns, exis, indexes, eps)
             count_epoch += 1
         print('\nПотребовалось эпох: '+str(count_epoch))
         for o in self.output_neurons:
@@ -145,21 +133,6 @@ class NeuronWebMor:
                     if i not in indexes:
                         indexes.append(i)
         return (False, indexes) if len(indexes) != 0 else (True, [])
-
-
-        # for i in range(len(exi2)):
-
-
-        # for i in range(epoch):
-        #     #print('Эпоха №' + str(i+1))
-        #     for pattern in patterns:
-        #         self.direct_way(pattern[0])
-        #         self.reverse_way(pattern[1])
-        #         self.error_correct(ny)
-        # print('end')
-        #
-        # print(self.output_neurons[0])
-        # #ripnt(self.__str__())
 
     def direct_way(self, pattern):
         for i in range(self.count_input_neurons):
@@ -202,6 +175,3 @@ class NeuronWebMor:
 
         for i in range(len(self.hide_neurons[-1])):
             self.hide_neurons[-1][i].ws_correction(ny, self.output_neurons)
-
-        # for i in range(self.count_output_neurons):
-        #     self.output_neurons[i].ws_correction(ny, self.output_neurons)

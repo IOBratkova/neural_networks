@@ -66,10 +66,12 @@ class CalculatingMor:
         print('\n>> Создание обучающих выборок')
         self.m_list = self.__make_all_m()
         print('\n>> Создание НС')
-        self.neuron_web = NeuronWebMor(len(self.letter_a1), len(self.letters_list), count_hide)
-        print(self.neuron_web)
+        self.neuron_web = NeuronWebMor(len(self.letter_a1),
+                                       len(self.letters_list), count_hide
+                                       , (-0.5, 0.5))
+        #print(self.neuron_web)
         print('\n>> НАЧАЛО ОБУЧЕНИЯ С ПОМОЩЬЮ МОР...')
-        self.neuron_web.teaching(self.m_list, 0.1)
+        self.neuron_web.teaching(self.m_list, 0.1, 0.1)
 
     def __make_letters_list(self):
         self.letters_list = [

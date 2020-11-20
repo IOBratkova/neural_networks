@@ -21,10 +21,10 @@ neuron_web.output_neurons[0].w_list[0] = 0.0
 
 patterns = [([0.5, 0.3], [1])]
 
-neuron_web.teaching(patterns, 0.1, 1)
-
-neuron_web.direct_way(patterns[0][0])
-print(neuron_web.__str__())
-
-neuron_web.direct_way(patterns[0][0])
-print(neuron_web.__str__())
+neuron_web.teaching(patterns, 0.1)
+#
+# neuron_web.direct_way(patterns[0][0])
+# print(neuron_web.__str__())
+#
+# neuron_web.direct_way(patterns[0][0])
+# print(neuron_web.__str__())
