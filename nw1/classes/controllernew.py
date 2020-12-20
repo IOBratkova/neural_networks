@@ -17,14 +17,14 @@ class Controller:
     def read_letter_b2(self, matrix):
         self.algorithm.letter_b2 = [0 if not el else 1 for line in matrix for el in line]
 
-    def read_letter_c1(self, matrix):
-        self.algorithm.letter_c1 = [0 if not el else 1 for line in matrix for el in line]
-
-    def read_letter_c2(self, matrix):
-        self.algorithm.letter_c2 = [0 if not el else 1 for line in matrix for el in line]
-
-    def read_letter_c3(self, matrix):
-        self.algorithm.letter_c3 = [0 if not el else 1 for line in matrix for el in line]
+    def read_letter_c(self, matrix):
+        self.algorithm.letter_c = [0 if not el else 1 for line in matrix for el in line]
+    #
+    # def read_letter_c2(self, matrix):
+    #     self.algorithm.letter_c = [0 if not el else 1 for line in matrix for el in line]
+    #
+    # def read_letter_c3(self, matrix):
+    #     self.algorithm.letter_c = [0 if not el else 1 for line in matrix for el in line]
 
     def teach_neuron(self, value_k):
         self.algorithm.k = value_k

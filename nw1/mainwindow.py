@@ -1,7 +1,7 @@
 from tkinter import *
-from classes.grid import MyGrid
-from classes.functions import ActivationFunctionConst
-from classes.controller import Controller
+from nw1.classes.grid import MyGrid
+from nw1.classes.functions import ActivationFunctionConst
+from nw1.classes.controller import Controller
 import copy
 
 class Widget:
@@ -51,7 +51,7 @@ class Widget:
             for j in range(len(matrix[i])):
                 if matrix[i][j]:
                     self.__my_grid.titles[i][j] \
-                        = self.__my_grid.grid.create_rectangle(j * col, i * row, (j + 1) * col, (i + 1) * row, fill="pink")
+                        = self.__my_grid.grid.create_rectangle(j * col, i * row, (j + 1) * col, (i + 1) * row, fill="green")
                 else:
                     self.__my_grid.grid.delete(self.__my_grid.titles[i][j])
                     self.__my_grid.titles[i][j] = None

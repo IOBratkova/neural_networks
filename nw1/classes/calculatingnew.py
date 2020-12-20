@@ -11,6 +11,7 @@ class Calculating:
         self.letter_a2 = None
         self.letter_b1 = None
         self.letter_b2 = None
+        self.letter_c = None
         self.letter_c1 = None
         self.letter_c2 = None
         self.letter_c3 = None
@@ -103,14 +104,13 @@ class Calculating:
         print('\n>> РАСПОЗНАВАНИЕ...')
         print('\n!Работа ведётся с сигмоидальной функцией!')
 
-        self.c_list_binary = self.__make_c_lists_binary()
-        if not self.c_list_binary:
-            print('Не введено ни одной буквы С')
-        print('\nБуква(ы) С в бинарном представлении: ')
-        print(self.c_list_binary)
+        if not self.letter_c:
+            print('Не введен символ С')
+        print('\nБуква С в бинарном представлении: ')
+        print(self.letter_c)
 
         print('\n>> Сходство: ', end='')
-        self.__calculate_gemini(self.c_list_binary, self.m_binary_list)
+        self.__calculate_gemini(self.m_binary_list)
 
         self.sigmoid_neuron = copy.deepcopy(self.binary_neuron)
         self.sigmoid_neuron.function = ActivationFunctionConst().sigmoid_function
@@ -158,12 +158,11 @@ class Calculating:
                 print(round((res)))
         return result
 
-    def __calculate_gemini(self, list_c, list_letters):
-        for row in list_c:
-            print('\n' + row[1] + ': ')
-            for letter in list_letters:
-                tmp = self.__help_gemini(row[0], letter[0])
-                print(letter[1] + ' =>> ' + str(tmp))
+    def __calculate_gemini(self, list_letters):
+        print('\n' + self.letter_c[1] + ': ')
+        for letter in list_letters:
+            tmp = self.__help_gemini(self.letter_c[0], letter[0])
+            print(letter[1] + ' =>> ' + str(tmp))
 
     # Подсчёт схожести
     def __help_gemini(self, letter_a, letter_b):
