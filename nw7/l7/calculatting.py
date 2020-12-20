@@ -16,12 +16,14 @@ class CalculatingMor:
         self.letter_0 = [1, 0, 0, 1, 1, 1, 0, 1, 0, 1, 1, 1, 0, 0, 0, 1, 0, 1, 0, 0, 1, 0, 0, 1, 1]
         self.letter_rs = [1, 0, 0, 1, 1, 1, 0, 1, 0, 0, 1, 1, 0, 0, 0, 1, 1, 1, 0, 0, 1, 0, 0, 1, 1]
         self.m = None
-        self.alpha = None
-        self.k = 0.5
-        self.w_matrix = None  # Матрица 10 на m
+        self.alpha = 0.9
+        self.k = 0.1
+        self.w_matrix = None
+        self.recognize_matrix = None
         self.a_list = None
         self.letters_list = None
-        self.eps = 0.000001
+        self.eps = 0.0001
+        self.dictionary = None
 
     def teaching(self, flag=True):
         print('>> ОБУЧЕНИЕ....')
@@ -52,17 +54,22 @@ class CalculatingMor:
             matrix_a = copy.copy(matrix_b)
             print('=====================================')
         res_matr = copy.copy(matrix_a)
+
         print('\nПоследняя матрица весов (с округлением до 2 символов): ')
         res_matr2 = [[round(r, 2) for r in row] for row in res_matr]
         for el in res_matr2:
             print(el)
         self.w_matrix = copy.deepcopy(matrix_a)
+        self.classified()
+        print('Итераций всего ' + str(iterate))
 
-    def recognize(self):
+    def classified(self):
         print('\n>> КЛАССИФИКАЦИЯ....')
         print('нумерация с 0')
+        dictionary = {}
         classes = []
         tmp_matrix = copy.deepcopy(self.w_matrix)
+        i = 0
         for letter in self.letters_list:
             a = nym.array([letter])
             b = nym.array(tmp_matrix)
@@ -70,12 +77,72 @@ class CalculatingMor:
             array = total.tolist()
             array0 = array[0]
             index = array0.index(max(array0))
-            #j = index + 1
-            print('Изображение ' + str(letter) + ', отнесено к классу: ' + str(index))
+            print('Изображение ' + str(i) + ': ' + str(letter) + ', отнесено к классу: ' + str(index))
             if index not in classes:
                 classes.append(index)
+            if index not in dictionary:
+                dictionary[index] = []
+                dictionary[index].append(i)
+            else:
+                dictionary[index].append(i)
+            i += 1
         classes.sort()
+        print(dictionary)
+        self.dictionary = dictionary
         print('Обнаружены классы: ' + str(classes))
+        del_classes = []
+        for i in range(len(self.letters_list)):
+            if i not in classes:
+                del_classes.append(i)
+        del_classes.reverse()
+        print('Не обнаруженные классы: ' + str(del_classes))
+        for index in del_classes:
+            for row in tmp_matrix:
+                del row[index]
+        res_matrix = [[round(r, 2) for r in row] for row in tmp_matrix]
+        for el in res_matrix:
+            print(el)
+        print()
+        sorted(self.dictionary.keys())
+        self.recognize_matrix = copy.deepcopy(tmp_matrix)
+        print(self.dictionary)
+
+    def recognize(self):
+        print('\n>> РАСПОЗНАВАНИЕ....')
+        self.__calculate_gemini()
+        a = nym.array([self.letter_rs])
+        b = nym.array(self.recognize_matrix)
+        total = a.dot(b)
+        array = total.tolist()
+        array = array[0]
+        print(self.dictionary)
+        print(array)
+
+    def __calculate_gemini(self):
+        print('Схожесть... ')
+        maximum = 0
+        index = 0
+        i = 0
+        for key, value in self.dictionary.items():
+            s = 'Класс №' + str(key) + ': '
+            summa = 0
+            for el in value:
+                letter = self.letters_list[el]
+                summa += self.__help_gemini(self.letter_rs, letter)
+            s += str(summa)
+            if summa >= maximum:
+                maximum = summa
+                index = key
+            print(s)
+            i += 1
+        print('Предположительно rs класс №' + str(index))
+
+    def __help_gemini(self, letter_a, letter_b):
+        t = 0
+        for i in range(len(letter_a)):
+            if letter_b[i] == letter_a[i]:
+                t += 1
+        return t
 
     def __calc_d__(self, letter, matrix):
         ds = []
@@ -113,8 +180,6 @@ class CalculatingMor:
 
     def __make_letters_list(self):
         self.letters_list = []
-        if self.letter_0 is not None:
-            self.letters_list.append(self.letter_0)
         if self.letter_1 is not None:
             self.letters_list.append(self.letter_1)
         if self.letter_2 is not None:
@@ -133,12 +198,14 @@ class CalculatingMor:
             self.letters_list.append(self.letter_8)
         if self.letter_9 is not None:
             self.letters_list.append(self.letter_9)
+        if self.letter_0 is not None:
+            self.letters_list.append(self.letter_0)
 
     def __create_start_data__(self, flag):
         if not flag:
-            self.m = 10 #по умолчанию
+            self.m = 10
             self.__make_letters_list()
-            self.w_matrix = [[random.uniform(0.0, 1.0) for j in range(self.m)] for i in range(len(self.letters_list[0]))]
+            self.w_matrix = [[random.uniform(-0.9, 1.8) for j in range(self.m)] for i in range(len(self.letters_list[0]))]
         else:
             self.letter_0 = [0, 0, 0, 1]
             self.letter_1 = [0, 0, 1, 1]
@@ -159,7 +226,7 @@ class CalculatingMor:
                 [0.5, 0.5],
                 [0.2, 0.9]
             ]
-        self.alpha = 0.6
+        # self.alpha = 0.6
         print('Буквы: ')
         for el in self.letters_list:
             print(el)
