@@ -135,7 +135,7 @@ class Calculating:
         return result2
 
     def __calculate_c_s(self, neuron):
-        res = self.__calculate_s(self.c_list_binary, neuron)
+        res = self.__calculate_s_c(self.letter_c, neuron)
         return res
 
     def __classify(self, list):
@@ -147,21 +147,19 @@ class Calculating:
 
     def __get_image_class(self, neuron):
         result = []
-        for i in range(len(self.c_list_binary)):
-            if neuron.function[0] == 'Бинарная':
-                res = neuron.function[1](self.s_c_binary_list[i][0], self.avg_binary)
-                result.append((round(res[0]), self.s_c_binary_list[i][1]))
-                print(round(res[0]))
-            else:
-                res = neuron.function[1](self.s_c_binary_list[i][0], self.avg_binary)
-                result.append((round(res), self.s_c_binary_list[i][1]))
-                print(round((res)))
+        if neuron.function[0] == 'Бинарная':
+            res = neuron.function[1](self.s_c_binary_list[0], self.avg_binary)
+            result.append((round(res[0]), self.s_c_binary_list[0]))
+            print(round(res[0]))
+        else:
+            res = neuron.function[1](self.s_c_binary_list[0], self.avg_binary)
+            result.append((round(res), self.s_c_binary_list[0]))
+            print(round((res)))
         return result
 
     def __calculate_gemini(self, list_letters):
-        print('\n' + self.letter_c[1] + ': ')
         for letter in list_letters:
-            tmp = self.__help_gemini(self.letter_c[0], letter[0])
+            tmp = self.__help_gemini(self.letter_c, letter[0])
             print(letter[1] + ' =>> ' + str(tmp))
 
     # Подсчёт схожести
@@ -267,6 +265,17 @@ class Calculating:
             s = neuron.calculate_s(m_list[i][0])
             s_list.append((s, m_list[i][1]))
             print(m_list[i][1] + ', s = ' + str(s))
+        return s_list
+
+        # Считаем входные суммарные сигналы
+    def __calculate_s_c(self, c_list, neuron):
+        s_list = []
+       # c_list.insert(0, 0)
+        tmp_c  = copy.copy(c_list)
+        tmp_c.insert(0, 0)
+        s = neuron.calculate_s(tmp_c)
+        print("C" + ', s = ' + str(s))
+        s_list.append(s)
         return s_list
 
     def __calculate_qs(self):

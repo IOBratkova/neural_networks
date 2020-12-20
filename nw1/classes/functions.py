@@ -27,6 +27,7 @@ class ActivationFunctionConst(object):
         elif x != 0 and y == 0: delta_w = -1
         return w + delta_w * k
 
+
     #
     # # От -1 до 1
     # def tanh(self, s):
