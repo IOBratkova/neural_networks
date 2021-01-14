@@ -3,6 +3,8 @@ import copy
 from classes.neuron import Neuron
 from classes.functions import ActivationFunctionConst
 
+from nw1.classes.functions import make_ladder
+
 
 class Calculating:
     def __init__(self):
@@ -27,6 +29,7 @@ class Calculating:
         self.binary_neuron = None
         self.bipolar_neuron = None
         self.sigmoid_neuron = None
+        self.binary_ladder_neuron = None
 
         # Листы C1-C3 в разных вариантах
         self.c_list_binary = None
@@ -44,7 +47,7 @@ class Calculating:
         self.s_bipolar_list = []
         self.s_c_binary_list = []
 
-        # Кукушки
+        # Q
         self.q_binary = None
         self.q_bipolar = None
 
@@ -52,12 +55,13 @@ class Calculating:
         self.divider_binary = None
         self.divider_bipolar = None
 
-        # T
-        self.t = None
-
         # Avg
         self.avg_binary = None
         self.avg_bipolar = None
+
+        # Ступени
+        self.ladders_count = 5
+        self.q_list = None
 
     def teaching(self):
         print('\n>> ОБУЧЕНИЕ...')
@@ -93,16 +97,8 @@ class Calculating:
         print('\nQ1 и Q2:')
         self.__calculate_qs()
 
-        print('\n!Далее работа продолжается с бинарной функцией активации!')
-        t1 = self.__calculate_t(0.1, self.q_binary[0])
-        t2 = self.__calculate_t(0.9, self.q_binary[1])
-        print('\nЗначение t1 = ' + str(t1))
-        print('Значение t2 = ' + str(t2))
-        self.t = t1
-
     def recognition(self):
         print('\n>> РАСПОЗНАВАНИЕ...')
-        print('\n!Работа ведётся с сигмоидальной функцией!')
 
         if not self.letter_c:
             print('Не введен символ С')
@@ -112,23 +108,23 @@ class Calculating:
         print('\n>> Сходство: ', end='')
         self.__calculate_gemini(self.m_binary_list)
 
-        self.sigmoid_neuron = copy.deepcopy(self.binary_neuron)
-        self.sigmoid_neuron.function = ActivationFunctionConst().sigmoid_function
-        print('\n>> Выбрана функция варианта - ' + self.sigmoid_neuron.function[0])
+        self.binary_ladder_neuron = copy.deepcopy(self.binary_neuron)
+        self.binary_ladder_neuron.function = ActivationFunctionConst().ladder_binary_function
+        print('\n>> Выбрана функция варианта - ' + self.binary_ladder_neuron.function[0])
 
-        print('\n>> Входной(ые) суммарные сигналы С: ')
-        self.s_c_binary_list = self.__calculate_c_s(self.sigmoid_neuron)
+        print('\n>> Входной суммарный сигнал С: ')
+        self.s_c_binary_list = self.__calculate_c_s(self.binary_ladder_neuron)
 
-        print('\n>> Согласно функции активации, изображение(я) принадлежит(ат) классу(ам): ')
-        result1 = self.__classify(self.__get_image_class(self.sigmoid_neuron))
+        print('\n>> Согласно функции активации, изображение принадлежит классу: ')
+        result1 = self.__classify(self.__get_image_class(self.binary_ladder_neuron))
         print(result1)
 
         print('\n>> Сравним с функцией - ' + self.binary_neuron.function[0])
 
-        print('\n>> Входной(ые) суммарные сигналы С: ')
+        print('\n>> Входной суммарный сигнал С: ')
         self.s_c_binary_list = self.__calculate_c_s(self.binary_neuron)
 
-        print('\n>> Согласно функции активации, изображение(я) принадлежит(ат) классу(ам): ')
+        print('\n>> Согласно функции активации, изображение принадлежит классу: ')
         result2 = self.__classify(self.__get_image_class(self.binary_neuron))
         print(result2)
 
@@ -152,9 +148,14 @@ class Calculating:
             result.append((round(res[0]), self.s_c_binary_list[0]))
             print(round(res[0]))
         else:
-            res = neuron.function[1](self.s_c_binary_list[0], self.avg_binary)
-            result.append((round(res), self.s_c_binary_list[0]))
-            print(round((res)))
+            if neuron.function[0] == 'Ступенчатая бинарная':
+                res = neuron.function[1](self.q_list, self.ladders_count, self.s_c_binary_list[0])
+                result.append((round(res), self.s_c_binary_list[0]))
+                print(round(res))
+            else:
+                res = neuron.function[1](self.s_c_binary_list[0], self.avg_binary)
+                result.append((round(res), self.s_c_binary_list[0]))
+                print(round(res))
         return result
 
     def __calculate_gemini(self, list_letters):
@@ -285,6 +286,9 @@ class Calculating:
         print(' | q1 = ' + str(self.q_binary[0]), end='')
         print(' | q2 = ' + str(self.q_binary[1]), end='')
         print(' | s1(cp) = ' + str(self.divider_binary[0]), end='')
+
+        self.q_list = make_ladder(self.q_binary[0], self.q_binary[1], self.ladders_count)
+
         self.q_bipolar, self.divider_bipolar = self.__calculate_q1_q1(self.s_bipolar_list)
         print('\nБиполярные: ', end='')
         print('s2(cp) = ' + str(self.divider_bipolar[1]), end='')
@@ -302,7 +306,3 @@ class Calculating:
         q1 = center - tmp
         q2 = center + tmp
         return (q1, q2), (divider_a, divider_b)
-
-    def __calculate_t(self, y, q):
-        ln = -math.log((1 / y) - 1)
-        return ln / q
